@@ -21,8 +21,8 @@
         <label for="datastore"> Datastore </label><br/>
         <%= select_tag :datastore, options_for_select(@datastores) %> <br />
 
-        <label for="vlan"> Network Adapter </label><br/>
-        <%= select_tag :vlan, options_for_select(@networks) %> <br />
+        <label for="network"> Network Adapter </label><br/>
+        <%= select_tag :network, options_for_select(@networks) %> <br />
 
         <label for="source_vm"> Source VM </label><br/>
         <%= text_field_tag(:source_vm) %> <br/>
@@ -60,146 +60,89 @@
     <% end %>
 
     <script>
-                    var providerHandle = document.getElementById('provider');
-                                                var datacenterHandle = document.getElementById('datacenter');
-                                                console.log(providerHandle);
-                                                providerHandle.addEventListener('change', function(){
-                                                                console.log('selected provider', providerHandle.value);
-                                                                var xhr = new XMLHttpRequest();
-                                                                console.log(`/standard_build/find_datacenters.json?provider_id=${providerHandle.value}`);
-                                                                xhr.open('GET', `/standard_build/find_datacenters.json?provider_id=${providerHandle.value}`, true);
-                                                                console.log(xhr.readyState);
-                                                                xhr.onreadystatechange = function(){
-                                                                                if(xhr.readyState === 4 && xhr.status === 200){
-                                                                                                console.log(xhr.responseText)
-                                                                                                var datacenterDetails = JSON.parse(xhr.responseText);
-                                                                                                console.log(datacenterDetails);
-                                                                                                console.log(datacenterDetails.name);
-                                                                                                datacenterHandle.innerHTML = '';
-                                                                                                datacenterDetails.datacenters.value.forEach(function(datacenter){
-                                                                                                                var optionTag = document.createElement('option');
-                                                                                                                optionTag.setAttribute('value', datacenter.datacenter);
-                                                                                                                var text = document.createTextNode(datacenter.name);
-                                                                                                                optionTag.appendChild(text);
-                                                                                                                datacenterHandle.appendChild(optionTag);
-
-                                                                                                });
-                                                                                
-                                                                                }
-                                                                }
-                                                                xhr.send();
-                                                
-                                                }, false); 
+		var providerHandle = document.getElementById('provider');
+		var datacenterHandle = document.getElementById('datacenter');
+        var clusterHandle = document.getElementById('cluster');
+		var clusterNameHandle = document.getElementById('cluster_name');
+		var datacenterNameHandle = document.getElementById('datacenter_name');
+		var datastoreHandle = document.getElementById('datastore');
+		var datastoreNameHandle = document.getElementById('datastore_name');
+		var networkHandle = document.getElementById('network');
 
 
-                                                var clusterHandle = document.getElementById('cluster');
-                                                console.log(clusterHandle);
+		providerHandle.addEventListener('change', function(){
+		    var xhr = new XMLHttpRequest();
+		    xhr.open('GET', `/standard_build/find_datacenters.json?provider_id=${providerHandle.value}`, true);
+		    xhr.onreadystatechange = function(){
+		    if(xhr.readyState === 4 && xhr.status === 200){
+		        var datacenterDetails = JSON.parse(xhr.responseText);
+		        datacenterHandle.innerHTML = '';
+		        datacenterDetails.datacenters.forEach(function(datacenter){
+		                        var optionTag = document.createElement('option');
+		                        optionTag.setAttribute('value', datacenter.datacenter);
+		                        var text = document.createTextNode(datacenter.name);
+		                        optionTag.appendChild(text);
+		                        datacenterHandle.appendChild(optionTag);
+		        });
+		    }
+		}
+		    xhr.send();
 
-                                                var clusterNameHandle = document.getElementById('cluster_name');
-                                                clusterHandle.addEventListener('change', function(){
-                                                                clusterNameHandle.value = clusterHandle.children[clusterHandle.selectedIndex].text;
-                                                }, false);
+		}, false); 
 
-
-                                                var datacenterNameHandle = document.getElementById('datacenter_name');
-                                                datacenterHandle.addEventListener('change', function(){
-                                                                datacenterNameHandle.value = datacenterHandle.children[datacenterHandle.selectedIndex].text;
-                                                }, false);
-
-                                                datacenterHandle.addEventListener('change', function(){
-                                                console.log('selected datacenter', datacenterHandle.value);
-                                                var xhr = new XMLHttpRequest();
-                                                console.log(`/clone/find_clusters.json?provider=${providerHandle.value}&datacenter=${datacenterHandle.value}`);
-                                                xhr.open('GET', `/clone/find_clusters.json?provider=${providerHandle.value}&datacenter=${datacenterHandle.value}`, true);
-                                                setTimeout(function(){},900000);
-                                                console.log(xhr.readyState);
-                                                xhr.onreadystatechange = function(){
-                                                                if(xhr.readyState === 4 && xhr.status === 200){
-                                                                                console.log(xhr.responseText)
-                                                                                var clusterDetails = JSON.parse(xhr.responseText);
-                                                                                console.log(clusterDetails);
-                                                                                console.log(clusterDetails.name);
-                                                                                clusterHandle.innerHTML = '';
-                                                                                clusterDetails.clusters.value.forEach(function(cluster){
-                                                                                                var optionTag = document.createElement('option');
-                                                                                                optionTag.setAttribute('value', cluster.cluster);
-                                                                                                var text = document.createTextNode(cluster.name);
-                                                                                                optionTag.appendChild(text);
-                                                                                                clusterHandle.appendChild(optionTag);
-                                                                                });
-                                                
-                                                                                }
-                                                }
-                                                xhr.send();
-                                                
-                                }, false); 
+		clusterHandle.addEventListener('change', function(){
+			clusterNameHandle.value = clusterHandle.children[clusterHandle.selectedIndex].text;
+		}, false);
 
 
-                                                var datastoreHandle = document.getElementById('datastore');
-                                                console.log(datastoreHandle);
+		datacenterHandle.addEventListener('change', function(){
+			datacenterNameHandle.value = datacenterHandle.children[datacenterHandle.selectedIndex].text;
+		}, false);
 
-                                                var datastoreNameHandle = document.getElementById('datastore_name');
-                                                datastoreHandle.addEventListener('change', function(){
-                                                                datastoreNameHandle.value = datastoreHandle.children[datastoreHandle[selectedIndex]].text;
-                                                }, false);
-
-                                                datacenterHandle.addEventListener('change', function(){
-                                                console.log('selected datacenter', datacenterHandle.value);
-                                                var xhr = new XMLHttpRequest();
-                                                console.log(`/clone/find_datastores.json?provider=${providerHandle.value}&datacenter=${datacenterHandle.value}`);
-                                                xhr.open('GET', `/clone/find_datastores.json?provider=${providerHandle.value}&datacenter=${datacenterHandle.value}`, true);
-                                                setTimeout(function(){},900000);
-                                                console.log(xhr.readyState);
-                                                xhr.onreadystatechange = function(){
-                                                                if(xhr.readyState === 4 && xhr.status === 200){
-                                                                                console.log(xhr.responseText)
-                                                                                var datastoreDetails = JSON.parse(xhr.responseText);
-                                                                                console.log(datastoreDetails);
-                                                                                console.log(datastoreDetails.name);
-                                                                                datastoreHandle.innerHTML = '';
-                                                                                datastoreDetails.datastores.value.forEach(function(datastore){
-                                                                                                var optionTag = document.createElement('option');
-                                                                                                optionTag.setAttribute('value', datastore.datastore);
-                                                                                                var text = document.createTextNode(datastore.name);
-                                                                                                optionTag.appendChild(text);
-                                                                                                datastoreHandle.appendChild(optionTag);
-                                                                                });
-                                                
-                                                                                }
-                                                }
-                                                xhr.send();
-                                                
-                                }, false); 
+		datastoreHandle.addEventListener('change', function(){
+			datastoreNameHandle.value = datastoreHandle.children[datastoreHandle.selectedIndex].text;
+		}, false);
 
 
-                                                var networkHandle = document.getElementById('vlan');
-                                                datacenterHandle.addEventListener('change', function(){
-                                                console.log('selected network', networkHandle.value);
-                                                var xhr = new XMLHttpRequest();
-                                                console.log(`/clone/find_networks.json?provider=${providerHandle.value}&datacenter=${datacenterHandle.value}`);
-                                                xhr.open('GET', `/clone/find_networks.json?provider=${providerHandle.value}&datacenter=${datacenterHandle.value}`, true);
-                                                setTimeout(function(){},900000);
-                                                console.log(xhr.readyState);
-                                                xhr.onreadystatechange = function(){
-                                                                if(xhr.readyState === 4 && xhr.status === 200){
-                                                                                console.log(xhr.responseText)
-                                                                                var networkDetails = JSON.parse(xhr.responseText);
-                                                                                console.log(networkDetails);
-                                                                                console.log(networkDetails.name);
-                                                                                networkHandle.innerHTML = '';
-                                                                                networkDetails.networks.value.forEach(function(network){
-                                                                                                var optionTag = document.createElement('option');
-                                                                                                optionTag.setAttribute('value', network.network);
-                                                                                                var text = document.createTextNode(network.name);
-                                                                                                optionTag.appendChild(text);
-                                                                                                networkHandle.appendChild(optionTag);
-                                                                                });
-                                                
-                                                                                }
-                                                }
-                                                xhr.send();
-                                                
-                                }, false); 
+		datacenterHandle.addEventListener('change', function(){
+			var xhr = new XMLHttpRequest();
+			xhr.open('GET', `/standard_build/find_cdn.json?provider_id=${providerHandle.value}&datacenter=${datacenterHandle.value}`, true);
+			xhr.onreadystatechange = function(){
+				if(xhr.readyState === 4 && xhr.status === 200){
+					var receivedValue = JSON.parse(xhr.responseText);
+					var cdnDetails = receivedValue["cdn"]    
+					console.log(cdnDetails);
+
+					clusterHandle.innerHTML = '';
+					cdnDetails["clusters"].forEach(function(cluster){
+					            var optionTag = document.createElement('option');
+					            optionTag.setAttribute('value', cluster.cluster);
+					            var text = document.createTextNode(cluster.name);
+					            optionTag.appendChild(text);
+					            clusterHandle.appendChild(optionTag);
+					    });
+
+				    datastoreHandle.innerHTML = '';
+				    cdnDetails["datastores"].forEach(function(datastore){
+			                    var optionTag = document.createElement('option');
+			                    optionTag.setAttribute('value', datastore.datastore);
+			                    var text = document.createTextNode(datastore.name);
+			                    optionTag.appendChild(text);
+			                    datastoreHandle.appendChild(optionTag);
+					    });
+
+				    networkHandle.innerHTML = '';
+				    cdnDetails["networks"].forEach(function(network){
+			                    var optionTag = document.createElement('option');
+			                    optionTag.setAttribute('value', network.network);
+			                    var text = document.createTextNode(network.name);
+			                    optionTag.appendChild(text);
+			                    networkHandle.appendChild(optionTag);
+					    });
+			    }
+			}
+			xhr.send();
+		}, false); 
 
     </script>
 
