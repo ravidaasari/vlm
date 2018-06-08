@@ -1,0 +1,62 @@
+<%= form_with(model: catalog, local: true) do |form| %>
+  <% if catalog.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(catalog.errors.count, "error") %> prohibited this catalog from being saved:</h2>
+
+      <ul>
+      <% catalog.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :catalog_name %>
+    <%= form.text_field :catalog_name %>
+  </div>
+
+  <div class="field">
+    <%= form.label :cpu_min %>
+    <%= form.number_field :cpu_min %>
+  </div>
+
+  <div class="field">
+    <%= form.label :cpu_max %>
+    <%= form.number_field :cpu_max %>
+  </div>
+
+  <div class="field">
+    <%= form.label :mem_min %>
+    <%= form.number_field :mem_min %>
+  </div>
+
+  <div class="field">
+    <%= form.label :mem_max %>
+    <%= form.number_field :mem_max %>
+  </div>
+
+  <div class="field">
+    <%= form.label :disk_size %>
+    <%= form.number_field :disk_size %>
+  </div>
+
+  <div class="field">
+    <%= form.label :swap_disk %>
+    <%= form.check_box :swap_disk %>
+  </div>
+
+  <div class="field">
+    <%= form.label :template_path %>
+    <%= form.text_field :template_path %>
+  </div>
+
+  <div class="field">
+    <%= form.label :template_name %>
+    <%= form.text_field :template_name %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

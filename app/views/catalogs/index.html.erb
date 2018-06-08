@@ -1,0 +1,43 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Catalogs</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Catalog name</th>
+      <th>Cpu min</th>
+      <th>Cpu max</th>
+      <th>Mem min</th>
+      <th>Mem max</th>
+      <th>Disk size</th>
+      <th>Swap disk</th>
+      <th>Template path</th>
+      <th>Template name</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @catalogs.each do |catalog| %>
+      <tr>
+        <td><%= catalog.catalog_name %></td>
+        <td><%= catalog.cpu_min %></td>
+        <td><%= catalog.cpu_max %></td>
+        <td><%= catalog.mem_min %></td>
+        <td><%= catalog.mem_max %></td>
+        <td><%= catalog.disk_size %></td>
+        <td><%= catalog.swap_disk %></td>
+        <td><%= catalog.template_path %></td>
+        <td><%= catalog.template_name %></td>
+        <td><%= link_to 'Show', catalog %></td>
+        <td><%= link_to 'Edit', edit_catalog_path(catalog) %></td>
+        <td><%= link_to 'Destroy', catalog, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Catalog', new_catalog_path %>

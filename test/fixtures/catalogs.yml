@@ -1,0 +1,23 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  catalog_name: MyString
+  cpu_min: 1
+  cpu_max: 1
+  mem_min: 1
+  mem_max: 1
+  disk_size: 1
+  swap_disk: false
+  template_path: MyString
+  template_name: MyString
+
+two:
+  catalog_name: MyString
+  cpu_min: 1
+  cpu_max: 1
+  mem_min: 1
+  mem_max: 1
+  disk_size: 1
+  swap_disk: false
+  template_path: MyString
+  template_name: MyString

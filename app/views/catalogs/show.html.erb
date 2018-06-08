@@ -1,0 +1,49 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Catalog name:</strong>
+  <%= @catalog.catalog_name %>
+</p>
+
+<p>
+  <strong>Cpu min:</strong>
+  <%= @catalog.cpu_min %>
+</p>
+
+<p>
+  <strong>Cpu max:</strong>
+  <%= @catalog.cpu_max %>
+</p>
+
+<p>
+  <strong>Mem min:</strong>
+  <%= @catalog.mem_min %>
+</p>
+
+<p>
+  <strong>Mem max:</strong>
+  <%= @catalog.mem_max %>
+</p>
+
+<p>
+  <strong>Disk size:</strong>
+  <%= @catalog.disk_size %>
+</p>
+
+<p>
+  <strong>Swap disk:</strong>
+  <%= @catalog.swap_disk %>
+</p>
+
+<p>
+  <strong>Template path:</strong>
+  <%= @catalog.template_path %>
+</p>
+
+<p>
+  <strong>Template name:</strong>
+  <%= @catalog.template_name %>
+</p>
+
+<%= link_to 'Edit', edit_catalog_path(@catalog) %> |
+<%= link_to 'Back', catalogs_path %>
