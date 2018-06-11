@@ -1,20 +1,39 @@
 class Provider < ApplicationRecord
-
-	def connect 
+has_many :catalogs, :dependent => :destroy
+	 def connect 
 	    url = self.provider_url + "/rest/com/vmware/cis/session?~action=get"
-		response = HTTParty.post(url, 
-		    headers: { 'vmware-api-session-id' => self.provider_session ,'Content-Type' => 'application/json', 'Accept' => 'application/json'},
-		    verify: false
-		     )
-		if ( response["value"]["user"].nil? )
-			url = self.provider_url + "/rest/com/vmware/cis/session"
-			response = HTTParty.post(url, 
-			    basic_auth: { username: self.provider_user, password: self.provider_password },
-			    headers: { 'Content-Type' => 'application/json', 'Accept' => 'application/json'},
-			    verify: false
-			     )
-			self.provider_session = response["value"]
-		end 
-	end
+	    auth = { username: self.provider_user, password: self.provider_password }
+	    header = {}
+	    header["Content-Type"]  = 'application/json' 
+	    header["Accept"] = 'application/json'
+	    header["vmware-api-session-id"] = self.provider_session
 
+	    begin
+	      response = HTTParty.post(url, headers: header ,verify: false)
+	        case response.code
+	            when 200
+	            	# Current Session Active ... hence no work.
+	            	puts "Already logged in as #{response["value"]["user"]}"
+	            
+	            when 404
+	            	# Session expired or invalid session-id
+					url = self.provider_url + "/rest/com/vmware/cis/session"
+					response = HTTParty.post(url, basic_auth: auth, headers: header, verify: false)
+					self.provider_session = response["value"]
+					self.save
+	            else 
+	            	# Other status of responses.
+	            	puts "Unknown response below - "
+	                puts response["value"]
+	        end
+
+	    rescue HTTParty::Error => error
+	    	flash[:error] = error.inspect
+	    	return error
+	    
+	    rescue StandardError => error
+	        puts error.inspect
+	        return error
+	    end
+	end 
 end

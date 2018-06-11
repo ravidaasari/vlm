@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_06_08_044722) do
+ActiveRecord::Schema.define(version: 2018_06_11_065954) do
 
   create_table "catalogs", force: :cascade do |t|
     t.string "catalog_name"
@@ -24,6 +24,7 @@ ActiveRecord::Schema.define(version: 2018_06_08_044722) do
     t.string "template_name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "provider_id"
   end
 
   create_table "providers", force: :cascade do |t|

@@ -10,17 +10,21 @@ class StandardBuildController < ApplicationController
   def find_datacenters
     provider_id = params[:provider_id]
     @provider = Provider.find_by('id = ?',provider_id)
-    @provider.connect
-    uri="/rest/vcenter/datacenter"
-    base_url = @provider.provider_url
-    url = base_url+uri
-    header = {}
-    
-    header["Content-Type"]  = 'application/json' 
-    header["Accept"] = 'application/json'
-    header["vmware-api-session-id"] = @provider.provider_session
-    response = HTTParty.get(url, :headers => header ,:verify => false) 
-    @datacenters = response["value"]
+    connection_status = @provider.connect
+    if connection_status.nil?
+      @datacenters={}
+    else
+      uri="/rest/vcenter/datacenter"
+      base_url = @provider.provider_url
+      url = base_url+uri
+      header = {}
+      
+      header["Content-Type"]  = 'application/json' 
+      header["Accept"] = 'application/json'
+      header["vmware-api-session-id"] = @provider.provider_session
+      response = HTTParty.get(url, :headers => header ,:verify => false) 
+      @datacenters = response["value"]
+    end 
   end
 
   def find_cdn
@@ -63,7 +67,7 @@ class StandardBuildController < ApplicationController
     provider_id = params[:provider_id]
     @provider = Provider.find_by('id = ?',provider_id)
     @provider.connect
-    
+
     datacenter = params[:datacenter]
     uri="/rest/vcenter/cluster?filter.datacenters=#{datacenter}"
     base_url = @provider.provider_url
