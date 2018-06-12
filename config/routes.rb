@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get 'vm_actions/index'
+  get 'vm_actions/act'
   get 'standard_build/index'
   get 'standard_build/create'
   get 'standard_build/find_datacenters'

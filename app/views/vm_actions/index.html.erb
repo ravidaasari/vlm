@@ -1,0 +1,25 @@
+<html>
+<head>
+    <title> VM Actions</title>
+</head>
+<body>
+  
+
+   <%= form_tag({:action => 'act'}, method: "get") do %>
+        <label for="provider"> Provider </label>
+        <%#= collection_select :provider, :id, Provider.all, :id, :provider_name %> <br/>
+        <%= select_tag :provider, options_from_collection_for_select(Provider.all, "id", "provider_name"), :prompt => "--select provider--" %> <br/>
+        <label for="vm_name"> VM </label>
+        <%= text_field_tag(:vm_name) %> <br/>
+
+        <%= radio_button_tag(:cmd, "power") %> Power STATUS
+        <%= radio_button_tag(:cmd, "power_on") %> Power ON
+        <%= radio_button_tag(:cmd, "power_off") %> Power OFF
+        <%= radio_button_tag(:cmd, "power_reset") %> RESET
+        <%= radio_button_tag(:cmd, "destroy") %> DELETE
+
+    <%= submit_tag("Submit") %>
+    <% end %>
+
+</body>
+</html>

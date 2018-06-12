@@ -1,6 +1,6 @@
 class Provider < ApplicationRecord
 has_many :catalogs, :dependent => :destroy
-	 def connect 
+	 def connect
 	    url = self.provider_url + "/rest/com/vmware/cis/session?~action=get"
 	    auth = { username: self.provider_user, password: self.provider_password }
 	    header = {}
@@ -14,7 +14,15 @@ has_many :catalogs, :dependent => :destroy
 	            when 200
 	            	# Current Session Active ... hence no work.
 	            	puts "Already logged in as #{response["value"]["user"]}"
+	            	self.provider_session
 	            
+	            when 401
+	            	# Session expired or invalid session-id
+					url = self.provider_url + "/rest/com/vmware/cis/session"
+					response = HTTParty.post(url, basic_auth: auth, headers: header, verify: false)
+					self.provider_session = response["value"]
+					self.save
+
 	            when 404
 	            	# Session expired or invalid session-id
 					url = self.provider_url + "/rest/com/vmware/cis/session"
@@ -23,8 +31,8 @@ has_many :catalogs, :dependent => :destroy
 					self.save
 	            else 
 	            	# Other status of responses.
-	            	puts "Unknown response below - "
-	                puts response["value"]
+	            	puts "response code - #{response.code}"
+	                puts "response value - #{response['value']}"
 	        end
 
 	    rescue HTTParty::Error => error
@@ -35,5 +43,14 @@ has_many :catalogs, :dependent => :destroy
 	        puts error.inspect
 	        return error
 	    end
+	 end
+	
+
+	def connect_ws
+        host = self.provider_url.slice(8..self.provider_url.length)
+        user = self.provider_user
+        password = self.provider_password
+        opts = { host: host, user: user, password: password, insecure: true } 
+        return RbVmomi::VIM.connect opts
 	end 
 end

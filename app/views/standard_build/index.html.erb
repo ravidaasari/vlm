@@ -6,53 +6,49 @@
   
 
    <%= form_tag({:action => 'create'}, method: "get") do %>
-        <label for="provider"> Provider </label><br />
+        <label for="provider"> Provider </label>
         <%#= collection_select :provider, :id, Provider.all, :id, :provider_name %> <br/>
         <%= select_tag :provider, options_from_collection_for_select(Provider.all, "id", "provider_name"), :prompt => "--select provider--" %> <br/>
-        <label for="vm_name"> VM Name </label><br/>
-        <%= text_field_tag(:vm_name) %> <br/>
 
-        <label for="datacenter"> Datacenter </label><br/>
+        <label for="datacenter"> Datacenter </label>
         <%= select_tag :datacenter, options_from_collection_for_select(@datacenters, "datacenter", "name"), {:prompt => "--select datacenter--"} %>
         <img src="/images/loading.gif" height=20 id="loading-datacenter" style="display:none" /><br />
 
-        <label for="cluster"> Cluster </label><br />
+        <label for="cluster"> Cluster </label>
         <%= select_tag :cluster, options_from_collection_for_select(@clusters, "cluster", "name"), {:prompt => "--select cluster--"} %>
         <img src="/images/loading.gif" height=20 id="loading-cluster" style="display:none" /><br />
 
-        <label for="datastore"> Datastore </label><br/>
+        <label for="datastore"> Datastore </label>
         <%= select_tag :datastore, options_from_collection_for_select(@datastores, "datastore", "name"), {:prompt => "--select datastore--"} %>
         <img src="/images/loading.gif" height=20 id="loading-datastore" style="display:none" /> <br />
 
-        <label for="network"> Network Adapter </label><br/>
+        <label for="network"> Network Adapter </label>
         <%= select_tag :network, options_from_collection_for_select(@networks, "network", "name"), {:prompt => "--select network--"} %> 
         <img src="/images/loading.gif" height=20 id="loading-network" style="display:none" /><br />
 
-        <label for="source_vm"> Source VM </label><br/>
-        <%= text_field_tag(:source_vm) %> <br/>
+        <label for="source_vm"> Source VM </label>
+        <%= text_field_tag(:source_vm, value='sds-test') %> <br/>
 
-        <label for="target_vm"> Target VM </label><br/>
-        <%= text_field_tag(:target_vm) %> <br/>
+        <label for="target_vm"> Target VM </label>
+        <%= text_field_tag(:target_vm, value='our-vm') %> <br/>
 
-        <label for="ip_addr"> Ip Address </label><br/>
-        <%= text_field_tag(:ip_addr) %> <br/>
+        <label for="memoryMB"> Memory-new </label>
+        <%= text_field_tag(:memoryMB, value=1024) %> <br/>
 
-        <label for="gateway"> Gateway </label><br/>
-        <%= text_field_tag(:gateway) %> <br/>
+        <label for="numCPUs"> CPU's </label>
+        <%= text_field_tag(:numCPUs, value=1) %> <br/>
 
-        <label for="netmask"> Netmask </label><br/>
-        <%= text_field_tag(:netmask) %> <br/>
+        <label for="ip_addr"> Ip Address </label> 
+        <%= text_field_tag(:ip_address, value="10.128.81.80") %> <br/>
 
-        <label for="memoryMB"> Memory-new </label><br/>
-        <%= text_field_tag(:memoryMB) %> <br/>
+        <label for="netmask"> Netmask </label>
+        <%= text_field_tag(:netmask, value="255.255.240.0") %> <br/>
 
-        <label for="dnsServer"> DNS Server </label><br/>
-        <%= text_field_tag(:dnsServer) %> <br/>
+        <label for="gateway"> Gateway </label> 
+        <%= text_field_tag(:gateway, value="10.128.95.253") %> <br/>
 
-        <label for="numCPUs"> CPU's </label><br/>
-        <%= text_field_tag(:numCPUs) %> <br/>
-
-        
+        <label for="dnsServer"> DNS Server </label>
+        <%= text_field_tag(:dnsServer, value="10.128.242.1") %> <br/>
 
         <%= hidden_field_tag "datacenter_name", "dc_name" %>
         <%= hidden_field_tag "cluster_name", "cl_name" %>
