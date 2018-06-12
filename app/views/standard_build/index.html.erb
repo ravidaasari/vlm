@@ -3,9 +3,10 @@
     <title> Standard Build</title>
 </head>
 <body>
-  
+	<h3>Clone a VM </h3>  
 
    <%= form_tag({:action => 'create'}, method: "get") do %>
+   <div class="form-row">
         <label for="provider"> Provider </label>
         <%#= collection_select :provider, :id, Provider.all, :id, :provider_name %> <br/>
         <%= select_tag :provider, options_from_collection_for_select(Provider.all, "id", "provider_name"), :prompt => "--select provider--" %> <br/>
@@ -13,7 +14,8 @@
         <label for="datacenter"> Datacenter </label>
         <%= select_tag :datacenter, options_from_collection_for_select(@datacenters, "datacenter", "name"), {:prompt => "--select datacenter--"} %>
         <img src="/images/loading.gif" height=20 id="loading-datacenter" style="display:none" /><br />
-
+	</div><hr>
+	<div class="form-row">
         <label for="cluster"> Cluster </label>
         <%= select_tag :cluster, options_from_collection_for_select(@clusters, "cluster", "name"), {:prompt => "--select cluster--"} %>
         <img src="/images/loading.gif" height=20 id="loading-cluster" style="display:none" /><br />
@@ -25,6 +27,7 @@
         <label for="network"> Network Adapter </label>
         <%= select_tag :network, options_from_collection_for_select(@networks, "network", "name"), {:prompt => "--select network--"} %> 
         <img src="/images/loading.gif" height=20 id="loading-network" style="display:none" /><br />
+    </div><hr>
 
         <label for="source_vm"> Source VM </label>
         <%= text_field_tag(:source_vm, value='sds-test') %> <br/>
