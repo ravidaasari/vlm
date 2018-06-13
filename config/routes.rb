@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  get 'clone_build/index'
+  get 'clone_build/find_datacenters'
+  get 'clone_build/find_cdn'
+  get 'clone_build/create'
   get 'vm_actions/index'
   get 'vm_actions/act'
   get 'standard_build/index'
