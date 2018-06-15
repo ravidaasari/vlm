@@ -15,10 +15,12 @@
 			<div class="form-group">
 			<label for="source_vm"> Source VM Name: </label><br>
         	<%= text_field_tag(:source_vm, value='sds-test') %> 
+        	<span id="vm_error"> </span>
         	</div>
         	<div class="form-group">
 	        <label for="target_vm"> Target VM Name: </label><br>
     	    <%= text_field_tag(:target_vm, value='our-vm') %> 
+    	    <span id="tvm_error"> </span>
         	</div>
 		</div>
 	</div><hr>
@@ -110,7 +112,7 @@
 
     <% end %>
 
-    <script src="/js/standard-build.js"> </script>
+    <script src="/js/clone-build.js"> </script>
 
 </body>
 </html>

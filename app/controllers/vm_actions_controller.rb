@@ -25,6 +25,7 @@ class VmActionsController < ApplicationController
     end
 
     vm_obj_id = @response["value"][0]["vm"]
+    puts vm_obj_id
 
     uri_power_on = "/rest/vcenter/vm/#{vm_obj_id}/power/start"
     uri_power_off = "/rest/vcenter/vm/#{vm_obj_id}/power/stop"
@@ -63,6 +64,8 @@ class VmActionsController < ApplicationController
   	end	 	 
 
   	if flag != "exit"
+      puts url
+      puts header
 	case flag
   		when "post"
   			@response = HTTParty.post(url, headers: header, verify: false)

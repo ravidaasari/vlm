@@ -10,6 +10,64 @@ var loadingDatacenterHandle = document.getElementById('loading-datacenter');
 var loadingClusterHandle = document.getElementById('loading-cluster');
 var loadingNetworkHandle = document.getElementById('loading-network');
 var loadingDatastoreHandle = document.getElementById('loading-datastore');
+var vmHandle = document.getElementById('source_vm');
+var TvmHandle = document.getElementById('target_vm');
+var vmErrorHandle = document.getElementById('vm_error');
+var TvmErrorHandle = document.getElementById('tvm_error');
+var memoryHandle = document.getElementById('memoryMB');
+var cpuHandle = document.getElementById('numCPUs')
+
+vmHandle.addEventListener('change', function(){
+var xhr = new XMLHttpRequest();
+    xhr.open('GET', `/clone_build/find_vms.json?provider_id=${providerHandle.value}&source_vm=${vmHandle.value}`, true);
+    
+
+    xhr.onreadystatechange = function(){
+      if(xhr.readyState === 4 && xhr.status === 200 ){
+          var vmDetails = JSON.parse(xhr.responseText);
+          if (JSON.stringify(vmDetails) != '{"vms":[]}') {
+               vmErrorHandle.innerHTML = "valid source vm"
+               memoryHandle.value = vmDetails["vms"][0]["memory_size_MiB"]
+               cpuHandle.value = vmDetails["vms"][0]["cpu_count"]
+            }
+          else
+            {
+               vmErrorHandle.innerHTML = "invalid source vm"
+               memoryHandle.value = ""
+               cpuHandle.value = ""
+            }
+        }
+        else{
+          console.log("Unknown Error with readystate or xhrstatus")
+        }
+     }
+    xhr.send();
+
+}, false); 
+
+TvmHandle.addEventListener('change', function(){
+  var xhr = new XMLHttpRequest();
+    xhr.open('GET', `/clone_build/find_vms.json?provider_id=${providerHandle.value}&source_vm=${TvmHandle.value}`, true);
+
+    xhr.onreadystatechange = function(){
+    if(xhr.readyState === 4 && xhr.status === 200){
+        var vmDetails = JSON.parse(xhr.responseText);
+          if (JSON.stringify(vmDetails) != '{"vms":[]}') {
+               TvmErrorHandle.innerHTML = "vm name is taken"
+            }
+          else
+            {
+               TvmErrorHandle.innerHTML = ""
+            }
+        }
+        else{
+          console.log("Unknown Error with readystate or xhrstatus")
+        }
+}
+    xhr.send();
+
+}, false);
+
 
 providerHandle.addEventListener('change', function(){
 	datacenterHandle.innerHTML = '<option value="">--select datacenter--</option>'
@@ -17,7 +75,7 @@ providerHandle.addEventListener('change', function(){
 	datastoreHandle.innerHTML = '<option value="">--select datastore--</option>'
 	networkHandle.innerHTML = '<option value="">--select network--</option>'
     var xhr = new XMLHttpRequest();
-    xhr.open('GET', `/standard_build/find_datacenters.json?provider_id=${providerHandle.value}`, true);
+    xhr.open('GET', `/clone_build/find_datacenters.json?provider_id=${providerHandle.value}`, true);
     loadingDatacenterHandle.style.display = ""
     xhr.onreadystatechange = function(){
     if(xhr.readyState === 4 && xhr.status === 200){
@@ -59,7 +117,7 @@ datastoreHandle.addEventListener('change', function(){
 
 datacenterHandle.addEventListener('change', function(){
 	var xhr = new XMLHttpRequest();
-	xhr.open('GET', `/standard_build/find_cdn.json?provider_id=${providerHandle.value}&datacenter=${datacenterHandle.value}`, true);
+	xhr.open('GET', `/clone_build/find_cdn.json?provider_id=${providerHandle.value}&datacenter=${datacenterHandle.value}`, true);
 	loadingClusterHandle.style.display = ""
 	loadingDatastoreHandle.style.display = ""
 	loadingNetworkHandle.style.display = ""

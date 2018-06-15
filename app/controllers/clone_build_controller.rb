@@ -5,6 +5,7 @@ class CloneBuildController < ApplicationController
     @clusters = []
     @datastores = []
     @networks = []
+    @vms = []
   end
 
   def find_datacenters
@@ -24,8 +25,28 @@ class CloneBuildController < ApplicationController
       header["vmware-api-session-id"] = @provider.provider_session
       response = HTTParty.get(url, :headers => header ,:verify => false) 
       @datacenters = response["value"]
-    end 
+    end  
   end
+
+  def find_vms
+    vm = params[:source_vm]
+    provider_id = params[:provider_id]
+    @provider = Provider.find_by('id = ?',provider_id)
+    @provider.connect
+    
+    uri="/rest/vcenter/vm?filter.names=#{vm}"
+    base_url = @provider.provider_url
+    url = base_url+uri
+    header = {}
+   
+    header["Content-Type"]  = 'application/json' 
+    header["Accept"] = 'application/json'
+    header["vmware-api-session-id"] = @provider.provider_session
+    response = HTTParty.get(url, :headers => header ,:verify => false) 
+    @vms = response["value"]
+    puts "value of @vms => #{@vms}"
+  end
+
 
   def find_cdn
     datacenter = params[:datacenter]
@@ -60,7 +81,6 @@ class CloneBuildController < ApplicationController
       :datastores => @datastores,
       :networks => @networks
     }
-
   end
 
 
@@ -104,8 +124,6 @@ class CloneBuildController < ApplicationController
       ip_settings.subnetMask = my_netmask
       ip_settings.gateway = [ my_gateway ]
       adapter_mapping = vc_obj.CustomizationAdapterMapping adapter: ip_settings 
-      
-      
       
       customize_spec  = vc_obj.CustomizationSpec({
         identity:         identity,
