@@ -72,20 +72,21 @@ has_many :catalogs, :dependent => :destroy
 	            	# Current Session Active ... hence no work.
 	            	puts "Already logged in as #{response["value"]["user"]}"
 	            	puts response
-	            	self.provider_session
-	            
+					self.provider_session = "Session Disconnected"
+					self.save
+						            
 	            when 401
 	            	# Session expired or invalid session-id
 					url = self.provider_url + "/rest/com/vmware/cis/session"
-					response = HTTParty.post(url, basic_auth: auth, headers: header, verify: false)
-					self.provider_session = response["value"]
+					response = HTTParty.delete(url, headers: header, verify: false)
+					self.provider_session = "Session Disconnected"
 					self.save
 
 	            when 404
 	            	# Session expired or invalid session-id
 					url = self.provider_url + "/rest/com/vmware/cis/session"
-					response = HTTParty.post(url, basic_auth: auth, headers: header, verify: false)
-					self.provider_session = response["value"]
+					response = HTTParty.delete(url, headers: header, verify: false)
+					self.provider_session = "Session Disconnected"
 					self.save
 	            else 
 	            	# Other status of responses.

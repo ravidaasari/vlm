@@ -1,5 +1,5 @@
 class ProvidersController < ApplicationController
-  before_action :set_provider, only: [:show, :edit, :update, :destroy]
+  before_action :set_provider, only: [:show, :edit, :update, :destroy ]
 
   # GET /providers
   # GET /providers.json
@@ -60,6 +60,16 @@ class ProvidersController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  def disconnect
+    @provider = Provider.find(params["id"])
+    @provider.disconnect
+    respond_to do |format|
+      format.html { redirect_to providers_path, notice: 'Session was successfully disconnected.' }
+      format.json { head :no_content }
+    end
+  end
+
 
   private
     # Use callbacks to share common setup or constraints between actions.

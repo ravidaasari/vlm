@@ -20,7 +20,9 @@
         	<div class="form-group">
 	        <label for="target_vm"> Target VM Name: </label><br>
     	    <%= text_field_tag(:target_vm, value='our-vm') %> 
-    	    <span id="tvm_error"> </span>
+    	    <span id="tvm_error"> </span> <br>
+            <label for="target_vm"> Target VM Notes </label><br>
+            <%= text_area_tag(:target_vm_annotation)  %> 
         	</div>
 		</div>
 	</div><hr>

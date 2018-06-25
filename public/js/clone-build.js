@@ -139,9 +139,16 @@ datacenterHandle.addEventListener('change', function(){
 		    cdnDetails["datastores"].forEach(function(datastore){
 	                    var optionTag = document.createElement('option');
 	                    optionTag.setAttribute('value', datastore.datastore);
-	                    var text = document.createTextNode(datastore.name);
+                      var text = document.createTextNode(datastore.name);
+                      console.log(text);
 	                    optionTag.appendChild(text);
-	                    datastoreHandle.appendChild(optionTag);
+                      var inGB = Math.round(datastore.free_space/1073741824);
+                      var text1 = document.createTextNode("  "+inGB+" GB"+" free");
+                      //var text1 = document.createTextNode(datastore.free_space);
+                      console.log(text1);
+                      console.log(inGB);
+                      optionTag.appendChild(text1);
+                      datastoreHandle.appendChild(optionTag);
 			    });
                 loadingDatastoreHandle.style.display = "none"
 

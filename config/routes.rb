@@ -14,6 +14,7 @@ Rails.application.routes.draw do
   get 'standard_build/find_networks'
   get 'standard_build/find_cdn'
   resources :catalogs
+  get '/providers/disconnect' 
   resources :providers
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

@@ -96,6 +96,7 @@ class CloneBuildController < ApplicationController
     my_source_vm = params[:source_vm]
     my_target_vm = params[:target_vm]
     my_ip_address = params[:ip_address]
+    my_annotation = params[:annotation]
     provider_id = params[:provider]
     
     vc_obj = RbVmomi::VIM
@@ -106,7 +107,9 @@ class CloneBuildController < ApplicationController
                 
 
     #datastore = vc.
-    relocateSpec = vc_obj.VirtualMachineRelocateSpec
+    relocateSpec = vc_obj.VirtualMachineRelocateSpec({
+      datastore: params[:datastore]
+    })
 
 
     identity = vc_obj.CustomizationLinuxPrep({
@@ -132,6 +135,7 @@ class CloneBuildController < ApplicationController
       })
 
       target_config = vc_obj.VirtualMachineConfigSpec({
+               annotation: my_annotation,
                memoryMB: my_memoryMB,
                numCPUs: my_numCPUs
                })
