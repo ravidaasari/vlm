@@ -12,6 +12,9 @@
 
 ActiveRecord::Schema.define(version: 2018_06_11_065954) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "catalogs", force: :cascade do |t|
     t.string "catalog_name"
     t.integer "cpu_min"
