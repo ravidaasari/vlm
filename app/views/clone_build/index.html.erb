@@ -13,6 +13,9 @@
     	</div>
 		<div class="form-group col-md-4">
 			<div class="form-group">
+            <label for="datacenter"> Source Datacenter </label><br>
+            <%= select_tag :source_dc, options_from_collection_for_select(@datacenters, "datacenter", "name"), {:prompt => "--select datacenter--"} %>
+            <img src="/images/loading.gif" height=20 id="loading-sdc" style="display:none" /><br/>
 			<label for="source_vm"> Source VM Name: </label><br>
         	<%= text_field_tag(:source_vm, value='sds-test') %> 
         	<span id="vm_error"> </span>
@@ -108,6 +111,7 @@
         <%= hidden_field_tag "datacenter_name", "dc_name" %>
         <%= hidden_field_tag "cluster_name", "cl_name" %>
         <%= hidden_field_tag "datastore_name", "ds_name" %>
+        <%= hidden_field_tag "network_name", "nw_name" %>
                 
 
         <%= submit_tag("CloneVM") %>

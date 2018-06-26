@@ -6,7 +6,9 @@ var datacenterNameHandle = document.getElementById('datacenter_name');
 var datastoreHandle = document.getElementById('datastore');
 var datastoreNameHandle = document.getElementById('datastore_name');
 var networkHandle = document.getElementById('network');
+var networkNameHandle = document.getElementById('network_name');
 var loadingDatacenterHandle = document.getElementById('loading-datacenter');
+var loadingSdcHandle = document.getElementById('loading-sdc');
 var loadingClusterHandle = document.getElementById('loading-cluster');
 var loadingNetworkHandle = document.getElementById('loading-network');
 var loadingDatastoreHandle = document.getElementById('loading-datastore');
@@ -15,7 +17,8 @@ var TvmHandle = document.getElementById('target_vm');
 var vmErrorHandle = document.getElementById('vm_error');
 var TvmErrorHandle = document.getElementById('tvm_error');
 var memoryHandle = document.getElementById('memoryMB');
-var cpuHandle = document.getElementById('numCPUs')
+var cpuHandle = document.getElementById('numCPUs');
+var sourceDcHandle = document.getElementById('source_dc');
 
 vmHandle.addEventListener('change', function(){
 var xhr = new XMLHttpRequest();
@@ -71,11 +74,13 @@ TvmHandle.addEventListener('change', function(){
 
 providerHandle.addEventListener('change', function(){
 	datacenterHandle.innerHTML = '<option value="">--select datacenter--</option>'
+  sourceDcHandle.innerHTML = '<option value="">--select datacenter--</option>'
 	clusterHandle.innerHTML = '<option value="">--select cluster--</option>'
 	datastoreHandle.innerHTML = '<option value="">--select datastore--</option>'
 	networkHandle.innerHTML = '<option value="">--select network--</option>'
     var xhr = new XMLHttpRequest();
     xhr.open('GET', `/clone_build/find_datacenters.json?provider_id=${providerHandle.value}`, true);
+    loadingSdcHandle.style.display = ""
     loadingDatacenterHandle.style.display = ""
     xhr.onreadystatechange = function(){
     if(xhr.readyState === 4 && xhr.status === 200){
@@ -87,14 +92,27 @@ providerHandle.addEventListener('change', function(){
                         var text = document.createTextNode(datacenter.name);
                         optionTag.appendChild(text);
                         datacenterHandle.appendChild(optionTag);
+                  });
+
+        sourceDcHandle.innerHTML = '<option value="">--select datacenter--</option>'
+        datacenterDetails.datacenters.forEach(function(datacenter){
+                        var optionTag = document.createElement('option');
+                        optionTag.setAttribute('value', datacenter.datacenter);
+                        var text = document.createTextNode(datacenter.name);
+                        optionTag.appendChild(text);
+                        sourceDcHandle.appendChild(optionTag);
 
         });
+        loadingSdcHandle.style.display = "none";
+        loadingDatacenterHandle.style.display = "none";
+        
 
-        loadingDatacenterHandle.style.display = "none"
     }
     else
     {
+      loadingSdcHandle.style.display = "none";
     	loadingDatacenterHandle.style.display = "none"
+      
     }
 }
     xhr.send();
@@ -113,6 +131,36 @@ datacenterHandle.addEventListener('change', function(){
 datastoreHandle.addEventListener('change', function(){
 	datastoreNameHandle.value = datastoreHandle.children[datastoreHandle.selectedIndex].text;
 }, false);
+
+networkHandle.addEventListener('change', function(){
+  networkNameHandle.value = networkHandle.children[networkHandle.selectedIndex].text;
+
+}, false);
+
+  sourceDcHandle.addEventListener('change', function(){
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', `/clone_build/find_folders.json?provider_id=${providerHandle.value}&source_dc=${sourceDcHandle.value}`, true);
+  
+  xhr.onreadystatechange = function(){
+    if(xhr.readyState === 4 && xhr.status === 200){
+      var folderDetails = JSON.parse(xhr.responseText);
+      folderHandle.innerHTML = '<option value="">--select folder--</option>'
+      folderDetails["folders"].forEach(function(folder){
+                  var optionTag = document.createElement('option');
+                  optionTag.setAttribute('value', folder.folder);
+                  var text = document.createTextNode(folder.name);
+                  optionTag.appendChild(text);
+                  folderHandle.appendChild(optionTag);
+          });
+      }
+    }
+  xhr.send();
+}, false); 
+
+
+
+
+
 
 
 datacenterHandle.addEventListener('change', function(){

@@ -6,6 +6,7 @@ class CloneBuildController < ApplicationController
     @datastores = []
     @networks = []
     @vms = []
+    @folders = []
   end
 
   def find_datacenters
@@ -47,6 +48,25 @@ class CloneBuildController < ApplicationController
     puts "value of @vms => #{@vms}"
   end
 
+  def find_folders
+    source_datacenter = params[:source_dc]
+    provider_id = params[:provider_id]
+    @provider = Provider.find_by('id = ?',provider_id)
+    @provider.connect
+    uri_folder="/rest/vcenter/folder?filter.datacenters=#{source_datacenter}"
+    base_url = @provider.provider_url
+    url = base_url+uri_folder
+    header = {}
+   
+    header["Content-Type"]  = 'application/json' 
+    header["Accept"] = 'application/json'
+    header["vmware-api-session-id"] = @provider.provider_session
+    response = HTTParty.get(url, :headers => header ,:verify => false)
+    @folders = response["value"]
+  end
+
+
+
 
   def find_cdn
     datacenter = params[:datacenter]
@@ -87,6 +107,7 @@ class CloneBuildController < ApplicationController
   def create
     my_datastore = params[:datastore_name]
     my_datacenter = params[:datacenter_name]
+    my_network = params[:network_name]
     my_dnsServer = params[:dnsServer]
     my_numCPUs = params[:numCPUs]
     my_memoryMB = params[:memoryMB]
@@ -133,21 +154,41 @@ class CloneBuildController < ApplicationController
         nicSettingMap:    [adapter_mapping],
         globalIPSettings: global_ip_settings
       })
-
+      
+      
       target_config = vc_obj.VirtualMachineConfigSpec({
                annotation: my_annotation,
                memoryMB: my_memoryMB,
-               numCPUs: my_numCPUs
-               })
+               numCPUs: my_numCPUs,
+               deviceChange: [
+         {
+          :operation => :edit,
+          :device => vc_obj.VirtualVmxnet3(
+            :key => 4000,
+            :deviceInfo => {
+              :label => 'Network Adapter 1',
+              :summary => my_network
+            },
+              :backing => vc_obj.VirtualEthernetCardNetworkBackingInfo(
+              :deviceName => my_network
+            ),
+            :addressType => 'generated'
+
+          )
+        }
+      ],
+      })
 
 
       spec = vc_obj.VirtualMachineCloneSpec(:location => relocateSpec,
                                          :customization => customize_spec,
                                          :config => target_config,
-                                         :powerOn => true,
+                                         :powerOn => false,
                                          :template => false)
 
       @new_vm = vm.CloneVM_Task(:folder => vm.parent, :name => my_target_vm, :spec => spec).wait_for_completion
   end
+
+
 
 end
