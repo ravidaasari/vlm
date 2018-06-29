@@ -1,0 +1,13 @@
+<%# if @response["value"]["state"] == "POWERED_ON" %>
+<%#= "The server is powered on"  %>
+<%# elsif @response["value"]["state"] == "POWERED_OFF" %>
+<!--<h2> The server is powered off </h2>-->
+<%# else %>
+<!--<h2> Unauthenticated </h2>-->
+<%# end %>
+<%# = @on_status %>
+<%= @response["value"] %> 
+<%= @response.code %>
+<%= @response.headers %>
+
+

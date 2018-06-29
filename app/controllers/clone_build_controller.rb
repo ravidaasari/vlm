@@ -1,4 +1,5 @@
 class CloneBuildController < ApplicationController
+  
   def index
     @providers = Provider.all
     @datacenters = []
@@ -7,6 +8,8 @@ class CloneBuildController < ApplicationController
     @networks = []
     @vms = []
     @folders = []
+    @vms_folder = []
+    @resource_pool = []
   end
 
   def find_datacenters
@@ -48,6 +51,42 @@ class CloneBuildController < ApplicationController
     puts "value of @vms => #{@vms}"
   end
 
+  def find_vms_of_folder
+    folder = params[:folders]
+    provider_id = params[:provider_id]
+    @provider = Provider.find_by('id = ?',provider_id)
+    @provider.connect
+    
+    uri="/rest/vcenter/vm?filter.folders=#{folder}"
+    base_url = @provider.provider_url
+    url = base_url+uri
+    header = {}
+   
+    header["Content-Type"]  = 'application/json' 
+    header["Accept"] = 'application/json'
+    header["vmware-api-session-id"] = @provider.provider_session
+    response = HTTParty.get(url, :headers => header ,:verify => false)
+    @vms_folder = response["value"]
+
+  end
+
+  def find_resource_pool(provider_id,cluster)
+    
+    @provider = Provider.find_by('id = ?',provider_id)
+    @provider.connect
+    uri = "/rest/vcenter/cluster/#{cluster}"
+    base_url = @provider.provider_url
+    url = base_url+uri
+    header = {}
+    header["Content-Type"]  = 'application/json' 
+    header["Accept"] = 'application/json'
+    header["vmware-api-session-id"] = @provider.provider_session
+    response = HTTParty.get(url, :headers => header ,:verify => false)
+    puts response["value"]["resource_pool"]
+    @resource_group = response["value"]["resource_pool"]
+
+  end
+
   def find_folders
     source_datacenter = params[:source_dc]
     provider_id = params[:provider_id]
@@ -62,7 +101,11 @@ class CloneBuildController < ApplicationController
     header["Accept"] = 'application/json'
     header["vmware-api-session-id"] = @provider.provider_session
     response = HTTParty.get(url, :headers => header ,:verify => false)
-    @folders = response["value"]
+    folders_tmp = response["value"]
+    folder = folders_tmp.find{|folder| folder["name"] == "vm"}
+    folder["name"] = "/"
+    @folders = folders_tmp 
+    
   end
 
 
@@ -114,12 +157,14 @@ class CloneBuildController < ApplicationController
     my_vlan = params[:vlan]    
     my_netmask = params[:netmask]
     my_gateway = params[:gateway]
-    my_source_vm = params[:source_vm]
+    my_source_vm = params[:source_vm_name]
     my_target_vm = params[:target_vm]
     my_ip_address = params[:ip_address]
     my_annotation = params[:annotation]
     provider_id = params[:provider]
+    my_cluster = params[:cluster]
     
+
     vc_obj = RbVmomi::VIM
     provider = Provider.find_by('id = ?',provider_id)
     vc = provider.connect_ws
@@ -129,7 +174,8 @@ class CloneBuildController < ApplicationController
 
     #datastore = vc.
     relocateSpec = vc_obj.VirtualMachineRelocateSpec({
-      datastore: params[:datastore]
+      datastore: params[:datastore],
+      pool: find_resource_pool(provider_id,my_cluster)
     })
 
 

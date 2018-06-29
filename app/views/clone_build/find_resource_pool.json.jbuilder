@@ -1,0 +1,1 @@
+json.resource_group @resource_group

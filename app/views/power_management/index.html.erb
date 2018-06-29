@@ -1,0 +1,56 @@
+<html>
+<head>
+    <title> Power Management </title>
+</head>
+<body>
+	<h3>Power Management </h3>  
+
+   <%= form_tag({:action => 'power'}, method: "get") do %>
+   <div class="form-row">
+		<div class="form-group col-md-4">
+        <label for="provider"> Provider </label> <br/>
+        <%= select_tag :provider, options_from_collection_for_select(Provider.all, "id", "provider_name"), :prompt => "--select provider--" %>
+    	</div>
+		<div class="form-group col-md-6">
+			<div class="form-group">
+            
+            <label for="datacenter"> Datacenter </label><br>
+            <%= select_tag :source_dc, options_from_collection_for_select(@datacenters, "datacenter", "name"), {:prompt => "--select datacenter--"} %> 
+            <img src="/images/loading.gif" height=20 id="loading-sdc" style="display:none" /><br/>
+
+            <label for="folder"> Folders </label><br>
+            <%= select_tag :folders, options_from_collection_for_select(@folders, "folder", "name"), {:prompt => "--select folder--"} %> 
+            <img src="/images/loading.gif" height=20 id="loading-folder" style="display:none" /><br/>
+
+			<label for="source_vm"> VM Name </label><br>
+        	<%= select_tag :source_vm, options_from_collection_for_select(@vms_folder, "vm", "name"), {:prompt => "--select VM--"} %>
+            <img src="/images/loading.gif" height=20 id="loading-vm" style="display:none" /><br/>
+        	<!-- <span id="vm_error"> </span> -->
+        	</div>
+
+        	<%= hidden_field_tag "datacenter_name", "dc_name" %>
+        	<%= hidden_field_tag "source_vm_name", "svm_name" %>
+
+
+        
+        <%= radio_button_tag(:cmd, "power") %> Power STATUS
+        <%= radio_button_tag(:cmd, "power_on") %> Power ON
+        <%= radio_button_tag(:cmd, "power_off") %> Power OFF
+        <%= radio_button_tag(:cmd, "power_reset") %> Reset <br/>
+        <%#= radio_button_tag(:cmd, "destroy") %> 
+
+        <%= submit_tag("Submit") %>
+        </div>
+
+    
+
+        	
+
+
+
+    <% end %>
+
+    <script src="/js/power-mgmt.js"> </script>
+
+</body>
+</html>

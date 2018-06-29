@@ -9,6 +9,8 @@ var networkHandle = document.getElementById('network');
 var networkNameHandle = document.getElementById('network_name');
 var loadingDatacenterHandle = document.getElementById('loading-datacenter');
 var loadingSdcHandle = document.getElementById('loading-sdc');
+var loadingFolderHandle = document.getElementById('loading-folder');
+var loadingVmHandle = document.getElementById('loading-vm');
 var loadingClusterHandle = document.getElementById('loading-cluster');
 var loadingNetworkHandle = document.getElementById('loading-network');
 var loadingDatastoreHandle = document.getElementById('loading-datastore');
@@ -19,6 +21,9 @@ var TvmErrorHandle = document.getElementById('tvm_error');
 var memoryHandle = document.getElementById('memoryMB');
 var cpuHandle = document.getElementById('numCPUs');
 var sourceDcHandle = document.getElementById('source_dc');
+var folderHandle = document.getElementById('folders');
+var newClusterHandle = document.getElementById('new_cluster_name');
+var vmNameHandle = document.getElementById('source_vm_name');
 
 vmHandle.addEventListener('change', function(){
 var xhr = new XMLHttpRequest();
@@ -48,28 +53,38 @@ var xhr = new XMLHttpRequest();
 
 }, false); 
 
-TvmHandle.addEventListener('change', function(){
-  var xhr = new XMLHttpRequest();
-    xhr.open('GET', `/clone_build/find_vms.json?provider_id=${providerHandle.value}&source_vm=${TvmHandle.value}`, true);
+
+folderHandle.addEventListener('change', function(){
+  
+var xhr = new XMLHttpRequest();
+    xhr.open('GET', `/clone_build/find_vms_of_folder.json?provider_id=${providerHandle.value}&folders=${folderHandle.value}`, true);
+    loadingVmHandle.style.display = ""
+    
 
     xhr.onreadystatechange = function(){
     if(xhr.readyState === 4 && xhr.status === 200){
-        var vmDetails = JSON.parse(xhr.responseText);
-          if (JSON.stringify(vmDetails) != '{"vms":[]}') {
-               TvmErrorHandle.innerHTML = "vm name is taken"
-            }
-          else
-            {
-               TvmErrorHandle.innerHTML = ""
-            }
-        }
-        else{
-          console.log("Unknown Error with readystate or xhrstatus")
-        }
-}
-    xhr.send();
+      console.log("inside")
+      var folderVmDetails = JSON.parse(xhr.responseText);
+      console.log(folderVmDetails);
+      vmHandle.innerHTML = '<option value="">--select VM--</option>'
+      folderVmDetails["vms_folder"].forEach(function(vm){
+                  var optionTag = document.createElement('option');
+                  optionTag.setAttribute('value', vm.vm);
+                  var text = document.createTextNode(vm.name);
+                  optionTag.appendChild(text);
+                  vmHandle.appendChild(optionTag);
+          });
+      loadingVmHandle.style.display = "none";
+      
+      }
+      else
+      {
+        loadingVmHandle.style.display = "none";
+      }
+      }
+  xhr.send();
+}, false); 
 
-}, false);
 
 
 providerHandle.addEventListener('change', function(){
@@ -137,14 +152,25 @@ networkHandle.addEventListener('change', function(){
 
 }, false);
 
+folderHandle.addEventListener('onload', function(){
+  networkNameHandle.value = networkHandle.children[networkHandle.selectedIndex].text;
+
+}, false);
+
+vmHandle.addEventListener('change',function(){
+  vmNameHandle.value = vmHandle.children[vmHandle.selectedIndex].text;
+},false);
+
   sourceDcHandle.addEventListener('change', function(){
   var xhr = new XMLHttpRequest();
   xhr.open('GET', `/clone_build/find_folders.json?provider_id=${providerHandle.value}&source_dc=${sourceDcHandle.value}`, true);
+  loadingFolderHandle.style.display = ""
   
   xhr.onreadystatechange = function(){
     if(xhr.readyState === 4 && xhr.status === 200){
       var folderDetails = JSON.parse(xhr.responseText);
-      folderHandle.innerHTML = '<option value="">--select folder--</option>'
+      folderHandle.innerHTML = '<option value="">--select folder--</option>';
+      //console.log( folderHandle.children[22].firstChild.textContent );
       folderDetails["folders"].forEach(function(folder){
                   var optionTag = document.createElement('option');
                   optionTag.setAttribute('value', folder.folder);
@@ -152,7 +178,13 @@ networkHandle.addEventListener('change', function(){
                   optionTag.appendChild(text);
                   folderHandle.appendChild(optionTag);
           });
+      loadingFolderHandle.style.display = "none";
       }
+      else
+    {
+      loadingFolderHandle.style.display = "none";
+      
+    }
     }
   xhr.send();
 }, false); 
@@ -220,3 +252,22 @@ datacenterHandle.addEventListener('change', function(){
 	}
 	xhr.send();
 }, false); 
+
+// clusterHandle.addEventListener('change', function(){
+//   var xhr = new XMLHttpRequest();
+//   xhr.open('GET', `/clone_build/find_resource_pool.json?provider_id=${providerHandle.value}&cluster=${clusterHandle.value}`, true);
+  
+  
+//   xhr.onreadystatechange = function(){
+//     if(xhr.readyState === 4 && xhr.status === 200){
+//       var newClusterDetails = JSON.parse(xhr.responseText);
+//       console.log(newClusterDetails.resource_group);
+//       //folderHandle.innerHTML = '<option value="">--select folder--</option>';
+//       //console.log( folderHandle.children[22].firstChild.textContent );
+      
+//       newClusterHandle.value = newClusterDetails.resource_group;
+      
+//     }
+//     }
+//   xhr.send();
+//   },false);
