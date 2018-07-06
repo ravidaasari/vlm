@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Vlm</title>
+    <title>VLM</title>
     <%#= csrf_meta_tags %>
     <%#= csp_meta_tag %>
 
@@ -19,13 +19,14 @@
     <%= link_to "Logout", destroy_user_session_path, method: :delete %> 
     
     <div class="container">
+      <h2 class="text-center">VM Life Cycle Management</h2>
       <%= render "./layouts/nav" %>
       <%= yield %>
     </div>
     <% else %>
     <%= link_to "Login",new_user_session_path %>
     <div class="container">
-      
+      <h2 class="text-center">VM Life Cycle Management</h2> 
       <%= yield %>
     </div>
     <%#= link_to "Sign Up", new_user_registration_path %>

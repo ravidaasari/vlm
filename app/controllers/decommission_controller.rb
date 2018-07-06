@@ -92,7 +92,9 @@ class DecommissionController < ApplicationController
     def decommission
   	provider_id = params[:provider]
   	vm_name = params[:source_vm_name]
+    @vmname = params[:source_vm_name]
   	cmd = params[:cmd]
+    @pcmd = params[:cmd]
   	# vm_obj_id = "vm-5057"
 
   	provider = Provider.find_by('id = ?',provider_id)
@@ -158,17 +160,15 @@ class DecommissionController < ApplicationController
   		when "post"
   			@response = HTTParty.post(url, headers: header, verify: false)
   			return @response
-  			NotificationMailer.decommission_notification(@response).deliver_now!
-
+  			
   		when "get"
   			@response = HTTParty.get(url, headers: header, verify: false)
   			return @response
-  			NotificationMailer.decommission_notification(@response).deliver_now!
-
+  			
   		when "delete"
   			@response = HTTParty.delete(url, headers: header, verify: false)
-  			return @response
-  			NotificationMailer.decommission_notification(@response).deliver_now!
+  			NotificationMailer.decommission_notification(@response, vm_name, current_user.email).deliver_now!
+        return @response
 
   		end
   	end

@@ -2,15 +2,15 @@
 
 <h1>Providers</h1>
 
-<table>
+<table class="table table-bordered table-hover">
   <thead>
     <tr>
       <th>Provider name</th>
       <th>Provider type</th>
       <th>Provider url</th>
       <th>Provider user</th>
-      <th>Provider password</th>
-      <th>Provider session</th>
+      <!-- <th>Provider password</th>
+      <th>Provider session</th> -->
       <th colspan="4"></th>
     </tr>
   </thead>
@@ -22,8 +22,8 @@
         <td><%= provider.provider_type %></td>
         <td><%= provider.provider_url %></td>
         <td><%= provider.provider_user %></td>
-        <td><%= provider.provider_password %></td>
-        <td><%= provider.provider_session %></td>
+        <!-- <td><%#= provider.encrypted_provider_password %></td>
+        <td><%#= provider.provider_session %></td> -->
         <td><%= link_to 'Show', provider %></td>
         <td><%= link_to 'Edit', edit_provider_path(provider) %></td>
         <td><%= link_to 'Destroy', provider, method: :delete, data: { confirm: 'Are you sure?' } %></td>

@@ -159,6 +159,7 @@ class CloneBuildController < ApplicationController
     my_gateway = params[:gateway]
     my_source_vm = params[:source_vm_name]
     my_target_vm = params[:target_vm]
+    # @target_vm_name = params[:target_vm_name]
     my_ip_address = params[:ip_address]
     my_annotation = params[:annotation]
     provider_id = params[:provider]
@@ -229,7 +230,7 @@ class CloneBuildController < ApplicationController
       spec = vc_obj.VirtualMachineCloneSpec(:location => relocateSpec,
                                          :customization => customize_spec,
                                          :config => target_config,
-                                         :powerOn => false,
+                                         :powerOn => true,
                                          :template => false)
 
       @new_vm = vm.CloneVM_Task(:folder => vm.parent, :name => my_target_vm, :spec => spec).wait_for_completion

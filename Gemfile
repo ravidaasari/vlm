@@ -4,6 +4,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby '2.5.1'
 gem 'rbvmomi'
 gem 'httparty'
+gem "attr_encrypted", "~> 3.0.0"
 
 gem "devise_ldap_authenticatable"
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'

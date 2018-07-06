@@ -25,6 +25,7 @@ var folderHandle = document.getElementById('folders');
 var newClusterHandle = document.getElementById('new_cluster_name');
 var vmNameHandle = document.getElementById('source_vm_name');
 
+
 vmHandle.addEventListener('change', function(){
 var xhr = new XMLHttpRequest();
     xhr.open('GET', `/clone_build/find_vms.json?provider_id=${providerHandle.value}&source_vm=${vmHandle.value}`, true);

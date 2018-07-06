@@ -1,5 +1,6 @@
 class Provider < ApplicationRecord
 has_many :catalogs, :dependent => :destroy
+attr_encrypted :provider_password, :key => 'This is a key that is 256 bits!!'
 	 def connect
 	    url = self.provider_url + "/rest/com/vmware/cis/session?~action=get"
 	    auth = { username: self.provider_user, password: self.provider_password }

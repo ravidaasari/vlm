@@ -1,4 +1,4 @@
 class ApplicationMailer < ActionMailer::Base
-  default from: 'from@example.com'
+  default from: 'core-infra-linux@vmware.com'
   layout 'mailer'
 end

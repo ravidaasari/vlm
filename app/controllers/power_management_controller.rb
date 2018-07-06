@@ -92,7 +92,9 @@ class PowerManagementController < ApplicationController
     def power
   	provider_id = params[:provider]
   	vm_name = params[:source_vm_name]
+    @vmname = params[:source_vm_name]
   	cmd = params[:cmd]
+    @pcmd = params[:cmd]
   	# vm_obj_id = "vm-5057"
 
   	provider = Provider.find_by('id = ?',provider_id)

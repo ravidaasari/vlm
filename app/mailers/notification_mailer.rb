@@ -5,11 +5,11 @@ class NotificationMailer < ApplicationMailer
   #
   #   en.notification_mailer.decommission_notification.subject
   #
-  def decommission_notification(response)
-    @greeting = "Hi"
+  def decommission_notification(response, vm_name, user)
     @response = response
-    puts @response
-
-    mail to: "sushmadssuresh@gmail.com" , subject: "VM deletion notification test"
+    @vm_name = vm_name
+    # puts vm_name
+    # puts @vm_name
+    mail(:to => user , :subject => "VM deletion notification test")
   end
 end

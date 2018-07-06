@@ -44,9 +44,9 @@
         <%= select_tag :datacenter, options_from_collection_for_select(@datacenters, "datacenter", "name"), {:prompt => "--select datacenter--"} %>
         <img src="/images/loading.gif" height=20 id="loading-datacenter" style="display:none" />
     	</div>
-    	<div class="form-group col-md-4">
+    	<!-- <div class="form-group col-md-4">
 			Details about datacenter
-		</div>
+		</div> -->
 	</div><hr>
 	<div class="form-row">
 		<div class="form-group col-md-4">
@@ -54,9 +54,9 @@
         <%= select_tag :datastore, options_from_collection_for_select(@datastores, "datastore", "name"), {:prompt => "--select datastore--"} %>
         <img src="/images/loading.gif" height=20 id="loading-datastore" style="display:none" /> 			
 		</div>
-		<div class="form-group col-md-4">
+		<!-- <div class="form-group col-md-4">
 			Details about datastore
-		</div>
+		</div> -->
 
 	</div><hr>
 
@@ -87,7 +87,7 @@
         <img src="/images/loading.gif" height=20 id="loading-network" style="display:none" />			
 		</div>
 		<div class="form-group col-md-6">
-        <label for="ip_addr"> Ip Address </label> 
+        <label for="ip_addr"> IP Address </label> 
         <%= text_field_tag(:ip_address, value="10.128.81.80") %> <br/>
 
         <label for="netmask"> Netmask </label>
@@ -121,6 +121,7 @@
         <%= hidden_field_tag "network_name", "nw_name" %>
         <%#= hidden_field_tag "new_cluster_name", "nw_cl_name" %>
         <%= hidden_field_tag "source_vm_name", "svm_name" %>
+        <%#= hidden_field_tag "target_vm_name", "tvm_name" %>
                 
 
         <%= submit_tag("CloneVM") %>
