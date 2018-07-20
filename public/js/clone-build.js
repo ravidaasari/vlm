@@ -3,6 +3,8 @@ var datacenterHandle = document.getElementById('datacenter');
 var clusterHandle = document.getElementById('cluster');
 var clusterNameHandle = document.getElementById('cluster_name');
 var datacenterNameHandle = document.getElementById('datacenter_name');
+var tagHandle = document.getElementById('tag');
+var tagNameHandle = document.getElementById('tag_name');
 var datastoreHandle = document.getElementById('datastore');
 var datastoreNameHandle = document.getElementById('datastore_name');
 var networkHandle = document.getElementById('network');
@@ -90,6 +92,7 @@ var xhr = new XMLHttpRequest();
 
 providerHandle.addEventListener('change', function(){
 	datacenterHandle.innerHTML = '<option value="">--select datacenter--</option>'
+  
   sourceDcHandle.innerHTML = '<option value="">--select datacenter--</option>'
 	clusterHandle.innerHTML = '<option value="">--select cluster--</option>'
 	datastoreHandle.innerHTML = '<option value="">--select datastore--</option>'
@@ -133,7 +136,9 @@ providerHandle.addEventListener('change', function(){
 }
     xhr.send();
 
+
 }, false); 
+
 
 clusterHandle.addEventListener('change', function(){
 	clusterNameHandle.value = clusterHandle.children[clusterHandle.selectedIndex].text;

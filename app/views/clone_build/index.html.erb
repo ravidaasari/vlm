@@ -73,7 +73,7 @@
         		<%= text_field_tag(:memoryMB, value=1024) %> 
 			</div>
 			<div class="form-group">
-		        <label for="numCPUs"> No. CPUs </label><br/>
+		        <label for="numCPUs"> No. CPUs </label>
         		<%= text_field_tag(:numCPUs, value=1) %> 
 			</div>
 
@@ -81,23 +81,25 @@
 	</div><hr>
 
 	<div class="form-row">
-		<div class="form-group col-md-4">
+		<div class="form-group col-md-6">
         <label for="network"> Network Adapter </label>
         <%= select_tag :network, options_from_collection_for_select(@networks, "network", "name"), {:prompt => "--select network--"} %> 
         <img src="/images/loading.gif" height=20 id="loading-network" style="display:none" />			
 		</div>
-		<div class="form-group col-md-6">
+
+
+		<div class="form-group col-md-4">
         <label for="ip_addr"> IP Address </label> 
         <%= text_field_tag(:ip_address, value="10.128.81.80") %> <br/>
 
         <label for="netmask"> Netmask </label>
-        <%= text_field_tag(:netmask, value="255.255.240.0") %> <br/>
+        <%= text_field_tag(:netmask, value="") %> <br/>
 
-        <label for="gateway"> Gateway </label> 
-        <%= text_field_tag(:gateway, value="10.128.95.253") %> <br/>
+        <label for="gateway">  Gateway </label> 
+        <%= text_field_tag(:gateway, value="") %> <br/>
 
         <label for="dnsServer"> DNS Server </label>
-        <%= text_field_tag(:dnsServer, value="10.128.242.1") %> <br/>
+        <%= text_field_tag(:dnsServer, value="") %> <br/>
 			
 		</div>
 
@@ -121,6 +123,7 @@
         <%= hidden_field_tag "network_name", "nw_name" %>
         <%#= hidden_field_tag "new_cluster_name", "nw_cl_name" %>
         <%= hidden_field_tag "source_vm_name", "svm_name" %>
+        <%= hidden_field_tag "tag_name", "tag_name" %>
         <%#= hidden_field_tag "target_vm_name", "tvm_name" %>
                 
 

@@ -1,5 +1,5 @@
 class ProvidersController < ApplicationController
-  before_action :set_provider, only: [:show, :edit, :update, :destroy ]
+  before_action :set_provider, only: [:show, :edit, :update, :destroy]
 
   # GET /providers
   # GET /providers.json
@@ -62,7 +62,8 @@ class ProvidersController < ApplicationController
   end
 
   def disconnect
-    @provider = Provider.find(params["id"])
+    @provider = Provider.find(params[:id])
+    puts @provider
     @provider.disconnect
     respond_to do |format|
       format.html { redirect_to providers_path, notice: 'Session was successfully disconnected.' }

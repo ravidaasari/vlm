@@ -10,6 +10,7 @@ class CloneBuildController < ApplicationController
     @folders = []
     @vms_folder = []
     @resource_pool = []
+    @tags = []
   end
 
   def find_datacenters
@@ -31,6 +32,43 @@ class CloneBuildController < ApplicationController
       @datacenters = response["value"]
     end  
   end
+
+  def find_tags(provider_id,network_id)
+    provider_id = params[:provider]
+    network_id = params[:network]
+    @provider = Provider.find_by('id = ?',provider_id)
+    @provider.connect
+
+    header = {}
+    header["Content-Type"]  = 'application/json' 
+    header["Accept"] = 'application/json'
+    header["vmware-api-session-id"] = @provider.provider_session
+      
+    data = {"object_id" => {:type => "Network", :id => network_id}}
+    object_id = {}
+    object_id["type"] = 'Network'
+    object_id["id"] = network_id
+    uri="/rest/com/vmware/cis/tagging/tag-association?~action=list-attached-tags"
+    base_url = @provider.provider_url
+    url = base_url+uri
+    
+    response = HTTParty.post(url, :headers => header ,:verify => false,:body => data.to_json) 
+    @tags = response["value"]
+    puts @tags
+
+    hash_response = {}
+      @tags.each do |tag|
+        uri_tag="/rest/com/vmware/cis/tagging/tag/id:#{tag}"
+        base_url = @provider.provider_url
+        url_tag = base_url+uri_tag
+        response_tag = HTTParty.get(url_tag, :headers => header ,:verify => false) 
+        puts response_tag
+        hash_response[response_tag["value"]["description"]]=response_tag["value"]["name"]
+       
+    end  
+    return hash_response
+  end
+
 
   def find_vms
     vm = params[:source_vm]
@@ -146,25 +184,85 @@ class CloneBuildController < ApplicationController
     }
   end
 
+  def get_ips(my_subnet)
+    @my_subnet = my_subnet
+    
+    infoblox_user = "svc.coreinfra_robot"
+    infoblox_password = "Vmware@123"
+    infoblox_url = "https://10.28.115.195"
+
+    auth = { username: infoblox_user, password: infoblox_password }
+    header = {}
+    header["Content-Type"]  = 'application/json' 
+    header["Accept"] = 'application/json'
+
+    url = infoblox_url + "/wapi/v2.5/network?network=#{my_subnet}&_return_as_object=1"
+    puts url
+    response = HTTParty.get(url, basic_auth: auth, headers: header, verify: false)
+    puts response
+    puts response["result"]
+    network_reference = response["result"][0]["_ref"]
+
+    # body = '{"num" => 5}'
+    url1 = infoblox_url + "/wapi/v2.5/" + network_reference + "?_function=next_available_ip&_return_as_object=1"
+    response1 = HTTParty.post(url1, basic_auth: auth, headers: header, verify: false)
+    puts response1
+    return response1["result"]["ips"][0]
+
+  end
+
+  def register_host(my_ip_address, my_target_vm)
+    ip_address = my_ip_address
+    my_target_vm = my_target_vm + ".vmware.com"
+    puts ip_address
+    puts my_target_vm
+
+    infoblox_user = "svc.coreinfra_robot"
+    infoblox_password = "Vmware@123"
+    infoblox_url = "https://10.28.115.195"
+
+    auth = { username: infoblox_user, password: infoblox_password }
+    header = {}
+    header["Content-Type"]  = 'application/json' 
+    header["Accept"] = 'application/json'
+
+    url = "https://10.28.115.195/wapi/v2.5/record:host"
+    # body = {:name=>"#{my_target_vm}", :ipv4addrs=>[{:ipv4addr=>"#{ip_address}"}], :view=>"default", :extattrs=>{:"Tenant ID"=>{:value=>"1011"}, :"Cloud API Owned"=>{:value=>"False"}, :"CMP Type"=>{:value=>"vCO/vCAC"}}}
+    # body =  {"name" => "#{my_target_vm}","ipv4addrs"=> [{"ipv4addr"=> "#{ip_address}"}],"view"=> "default","extattrs"=> {"Tenant ID"=> {"value"=> "1011"},"Cloud API Owned"=> {"value"=> "False"},"CMP Type"=> {"value"=> "vCO/vCAC"}}}
+
+    body = {"name":my_target_vm,"ipv4addrs":[{"ipv4addr":ip_address}],"view":"default","extattrs":{"Tenant ID":{"value":"1011"},"Cloud API Owned":{"value":"False"},"CMP Type":{"value":"vCO/vCAC"}}}
+    response_dns = HTTParty.post(url, basic_auth: auth, headers: header, body: body.to_json, verify: false)
+    puts response_dns
+
+
+  end
+
 
   def create
     my_datastore = params[:datastore_name]
     my_datacenter = params[:datacenter_name]
     my_network = params[:network_name]
-    my_dnsServer = params[:dnsServer]
+    # my_dnsServer = params[:dnsServer]
     my_numCPUs = params[:numCPUs]
     my_memoryMB = params[:memoryMB]
     my_vlan = params[:vlan]    
-    my_netmask = params[:netmask]
-    my_gateway = params[:gateway]
+    # my_netmask = params[:netmask]
+    # my_gateway = params[:gateway]
     my_source_vm = params[:source_vm_name]
     my_target_vm = params[:target_vm]
     # @target_vm_name = params[:target_vm_name]
-    my_ip_address = params[:ip_address]
+    # my_ip_address = params[:ip_address]
     my_annotation = params[:annotation]
     provider_id = params[:provider]
     my_cluster = params[:cluster]
+    network_id = params[:network]
     
+    my_net_details = find_tags(provider_id,network_id)
+    puts my_net_details
+    my_netmask = my_net_details["netmask"]
+    my_gateway = my_net_details["gateway"]
+    my_dnsServer = my_net_details["dns"]
+    my_subnet = my_net_details["subnet"]
 
     vc_obj = RbVmomi::VIM
     provider = Provider.find_by('id = ?',provider_id)
@@ -172,8 +270,9 @@ class CloneBuildController < ApplicationController
     dc = vc.serviceInstance.find_datacenter(my_datacenter) or abort "datacenter not found"
     vm = dc.find_vm(my_source_vm) or abort "VM not found"
                 
+    my_ip_address = get_ips(my_subnet)
+    register_host(my_ip_address, my_target_vm)
 
-    #datastore = vc.
     relocateSpec = vc_obj.VirtualMachineRelocateSpec({
       datastore: params[:datastore],
       pool: find_resource_pool(provider_id,my_cluster)

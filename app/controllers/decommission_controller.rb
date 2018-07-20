@@ -89,12 +89,20 @@ class DecommissionController < ApplicationController
     @folders = folders_tmp 
     end
 
+    # def send_replacement_request(shift)
+    #  @recipients = ["sds@vmware.com","sds1@vmware.com"]
+    #  @recipients.each do |recipient|
+    #    NotificationMailer.decommission_notification(recipient, shift).deliver
+    #  end
+    # end
+
     def decommission
   	provider_id = params[:provider]
   	vm_name = params[:source_vm_name]
     @vmname = params[:source_vm_name]
   	cmd = params[:cmd]
     @pcmd = params[:cmd]
+    @senders = params[:send_mail]
   	# vm_obj_id = "vm-5057"
 
   	provider = Provider.find_by('id = ?',provider_id)
@@ -140,6 +148,7 @@ class DecommissionController < ApplicationController
   			flag = "post"
   			url = base_url+uri_power_off
 
+
   		when "power_reset"
   			flag = "post"
   			url = base_url+uri_reset
@@ -160,14 +169,19 @@ class DecommissionController < ApplicationController
   		when "post"
   			@response = HTTParty.post(url, headers: header, verify: false)
   			return @response
+
   			
   		when "get"
   			@response = HTTParty.get(url, headers: header, verify: false)
-  			return @response
+        return @response
   			
   		when "delete"
   			@response = HTTParty.delete(url, headers: header, verify: false)
-  			NotificationMailer.decommission_notification(@response, vm_name, current_user.email).deliver_now!
+        date = Date.civil(params[:date][:year].to_i, params[:date][:month].to_i, params[:date][:day].to_i)
+        if date == Date.today 
+          # NotificationMailer.decommission_notification(@response, vm_name, current_user.email).deliver_now!
+          NotificationMailer.decommission_notification(@response, vm_name, @senders).deliver_now!
+        end  			
         return @response
 
   		end

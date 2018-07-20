@@ -36,8 +36,9 @@ Rails.application.routes.draw do
   get 'standard_build/find_networks'
   get 'standard_build/find_cdn'
   resources :catalogs
-  resources :providers
   get '/providers/disconnect' 
+  resources :providers
+  
   
   root 'home#index'
 

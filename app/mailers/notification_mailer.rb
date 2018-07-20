@@ -5,11 +5,21 @@ class NotificationMailer < ApplicationMailer
   #
   #   en.notification_mailer.decommission_notification.subject
   #
-  def decommission_notification(response, vm_name, user)
+
+   # def self.send_replacement_request(shift)
+   #   @recipients = ["sds@vmware.com","sds1@vmware.com"]
+   #   @recipients.each do |recipient|
+   #     decommission_notification(recipient, shift, response, vm_name, user).deliver
+   #   end
+   # end
+
+  def decommission_notification(response, vm_name, senders)
+    # @senders = ["sds@vmware.com", "sds1@vmware.com"]
+    @senders = senders
     @response = response
     @vm_name = vm_name
     # puts vm_name
     # puts @vm_name
-    mail(:to => user , :subject => "VM deletion notification test")
+    mail(:to => @senders , :subject => "VM deletion notification test")
   end
 end

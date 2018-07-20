@@ -9,7 +9,7 @@
       <th>Provider type</th>
       <th>Provider url</th>
       <th>Provider user</th>
-      <!-- <th>Provider password</th>
+     <!--  <th>Provider password</th>
       <th>Provider session</th> -->
       <th colspan="4"></th>
     </tr>
@@ -27,7 +27,8 @@
         <td><%= link_to 'Show', provider %></td>
         <td><%= link_to 'Edit', edit_provider_path(provider) %></td>
         <td><%= link_to 'Destroy', provider, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-        <td><%= link_to 'Disconnect', providers_disconnect_path(id: provider.id)  %></td>
+        <td><%= link_to 'Disconnect', providers_disconnect_path(id: provider.id)  %>
+        </td>
       </tr>
     <% end %>
   </tbody>

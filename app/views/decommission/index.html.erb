@@ -36,11 +36,17 @@
         <%= radio_button_tag(:cmd, "power") %> Power STATUS
         <%= radio_button_tag(:cmd, "power_off") %> Power OFF
         <%= radio_button_tag(:cmd, "destroy") %> DELETE
+        <h4> Send Mail to: </h4>
+        <!-- <input id="send_mail" type="email" placeholder="sds@vmware.com" multiple> -->
+        <%= email_field_tag :send_mail, nil, multiple: true %>
 
         <%= submit_tag("Submit") %>
-        </div>
+        <br /><br />
+        <h4> Choose the date you want to delete a VM </h4>
+        <%#= select_date(Date.current, prompt: {day: 'Choose day', month: 'Choose month', year: 'Choose year'}) %>
+        <%= select_date Date.today, prefix: :date %>
 
-    
+        </div>
 
         	
 

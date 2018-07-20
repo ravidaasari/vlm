@@ -24,15 +24,16 @@
       <%= yield %>
     </div>
     <% else %>
-    <%= link_to "Login",new_user_session_path %>
+    <%#= link_to "Login",new_user_session_path %>
     <div class="container">
       <h2 class="text-center">VM Life Cycle Management</h2> 
       <%= yield %>
+      <p class="notice" align="left"><%= notice %></p>
+      <p class="alert" align="left"><%= alert %></p>
+
     </div>
     <%#= link_to "Sign Up", new_user_registration_path %>
     <% end %>
-    <p class="notice"><%= notice %></p>
-    <p class="alert"><%= alert %></p>
-
+  
   </body>
 </html>
