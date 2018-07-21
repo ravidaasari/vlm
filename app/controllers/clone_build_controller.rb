@@ -213,7 +213,7 @@ class CloneBuildController < ApplicationController
 
   def register_host(my_ip_address, my_target_vm)
     ip_address = my_ip_address
-    my_target_vm = my_target_vm + ".vmware.com"
+    my_target_vm = @my_target_vm + ".vmware.com"
     puts ip_address
     puts my_target_vm
 
@@ -249,7 +249,7 @@ class CloneBuildController < ApplicationController
     # my_netmask = params[:netmask]
     # my_gateway = params[:gateway]
     my_source_vm = params[:source_vm_name]
-    my_target_vm = params[:target_vm]
+    @my_target_vm = params[:target_vm]
     # @target_vm_name = params[:target_vm_name]
     # my_ip_address = params[:ip_address]
     my_annotation = params[:annotation]
@@ -270,8 +270,8 @@ class CloneBuildController < ApplicationController
     dc = vc.serviceInstance.find_datacenter(my_datacenter) or abort "datacenter not found"
     vm = dc.find_vm(my_source_vm) or abort "VM not found"
                 
-    my_ip_address = get_ips(my_subnet)
-    register_host(my_ip_address, my_target_vm)
+    @my_ip_address = get_ips(my_subnet)
+    register_host(@my_ip_address, @my_target_vm)
 
     relocateSpec = vc_obj.VirtualMachineRelocateSpec({
       datastore: params[:datastore],
@@ -280,7 +280,7 @@ class CloneBuildController < ApplicationController
 
 
     identity = vc_obj.CustomizationLinuxPrep({
-        hostName: vc_obj.CustomizationFixedName(name: my_target_vm),
+        hostName: vc_obj.CustomizationFixedName(name: @my_target_vm),
         domain:   "vmware.com"
       }) 
       
@@ -289,7 +289,7 @@ class CloneBuildController < ApplicationController
         dnsSuffixList: ["vmware.com"]
       })
       
-      ip_address      = vc_obj.CustomizationFixedIp(ipAddress: my_ip_address)
+      ip_address      = vc_obj.CustomizationFixedIp(ipAddress: @my_ip_address)
       ip_settings     = vc_obj.CustomizationIPSettings ip: ip_address 
       ip_settings.subnetMask = my_netmask
       ip_settings.gateway = [ my_gateway ]
@@ -332,7 +332,7 @@ class CloneBuildController < ApplicationController
                                          :powerOn => true,
                                          :template => false)
 
-      @new_vm = vm.CloneVM_Task(:folder => vm.parent, :name => my_target_vm, :spec => spec).wait_for_completion
+      @new_vm = vm.CloneVM_Task(:folder => vm.parent, :name => @my_target_vm, :spec => spec).wait_for_completion
   end
 
 
