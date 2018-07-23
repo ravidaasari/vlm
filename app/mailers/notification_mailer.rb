@@ -22,4 +22,17 @@ class NotificationMailer < ApplicationMailer
     # puts @vm_name
     mail(:to => @senders , :subject => "VM deletion notification test")
   end
+
+  def clone_notification(my_ip_address,my_target_vm, senders)
+    # @senders = ["sds@vmware.com", "sds1@vmware.com"]
+    @senders = senders
+    @my_target_vm = my_target_vm
+    @my_ip_address = my_ip_address
+    
+    # puts vm_name
+    # puts @vm_name
+    mail(:to => @senders , :subject => "VM Build notification test")
+  end
+
+
 end

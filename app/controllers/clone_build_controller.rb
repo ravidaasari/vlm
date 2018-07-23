@@ -248,7 +248,13 @@ class CloneBuildController < ApplicationController
     my_vlan = params[:vlan]    
     # my_netmask = params[:netmask]
     # my_gateway = params[:gateway]
-    my_source_vm = params[:source_vm_name]
+    my_folder = params[:folders]
+    my_folder_name = params[:folder_name]
+    if (my_folder_name == "/")
+      my_source_vm = params[:source_vm_name]
+    else
+    my_source_vm = "#{my_folder_name}/" + params[:source_vm_name]
+  end
     @my_target_vm = params[:target_vm]
     # @target_vm_name = params[:target_vm_name]
     # my_ip_address = params[:ip_address]
@@ -256,6 +262,7 @@ class CloneBuildController < ApplicationController
     provider_id = params[:provider]
     my_cluster = params[:cluster]
     network_id = params[:network]
+    @senders = params[:send_mail]
     
     my_net_details = find_tags(provider_id,network_id)
     puts my_net_details
@@ -333,6 +340,7 @@ class CloneBuildController < ApplicationController
                                          :template => false)
 
       @new_vm = vm.CloneVM_Task(:folder => vm.parent, :name => @my_target_vm, :spec => spec).wait_for_completion
+      NotificationMailer.clone_notification(@my_ip_address, @my_target_vm, @senders).deliver_now!
   end
 
 

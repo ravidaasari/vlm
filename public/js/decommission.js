@@ -6,6 +6,7 @@ var loadingVmHandle = document.getElementById('loading-vm');
 var vmHandle = document.getElementById('source_vm');
 var sourceDcHandle = document.getElementById('source_dc');
 var folderHandle = document.getElementById('folders');
+var folderNameHandle = document.getElementById('folder_name')
 var vmNameHandle = document.getElementById('source_vm_name');
 
 vmHandle.addEventListener('change', function(){
@@ -92,6 +93,9 @@ folderHandle.addEventListener('onload', function(){
   networkNameHandle.value = networkHandle.children[networkHandle.selectedIndex].text;
 
 }, false);
+
+
+
 
 vmHandle.addEventListener('change',function(){
   vmNameHandle.value = vmHandle.children[vmHandle.selectedIndex].text;

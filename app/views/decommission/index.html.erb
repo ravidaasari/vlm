@@ -32,11 +32,16 @@
         	<%= hidden_field_tag "source_vm_name", "svm_name" %>
 
 
+
         
         <%= radio_button_tag(:cmd, "power") %> Power STATUS
+        <%= submit_tag("check") %>
+
         <%= radio_button_tag(:cmd, "power_off") %> Power OFF
-        <%= radio_button_tag(:cmd, "destroy") %> DELETE
-        <h4> Send Mail to: </h4>
+        <%= submit_tag("Submit") %> <br/>
+
+        <%= radio_button_tag(:cmd, "destroy") %> DELETE <br/>
+        Send Mail to:
         <!-- <input id="send_mail" type="email" placeholder="sds@vmware.com" multiple> -->
         <%= email_field_tag :send_mail, nil, multiple: true %>
 

@@ -90,7 +90,7 @@
 
 		<div class="form-group col-md-4">
         <label for="ip_addr"> IP Address </label> 
-        <%= text_field_tag(:ip_address, value="10.128.81.80") %> <br/>
+        <%= text_field_tag(:ip_address, value="") %> <br/>
 
         <label for="netmask"> Netmask </label>
         <%= text_field_tag(:netmask, value="") %> <br/>
@@ -109,6 +109,9 @@
 
 
 	<div class="form-row">
+        Send Mail to: 
+        <!-- <input id="send_mail" type="email" placeholder="sds@vmware.com" multiple> -->
+        <%= email_field_tag :send_mail, nil, multiple: true %>
 
 
     </div><hr>
@@ -124,7 +127,9 @@
         <%#= hidden_field_tag "new_cluster_name", "nw_cl_name" %>
         <%= hidden_field_tag "source_vm_name", "svm_name" %>
         <%= hidden_field_tag "tag_name", "tag_name" %>
+        <%= hidden_field_tag "folder_name", "fl_name" %>
         <%#= hidden_field_tag "target_vm_name", "tvm_name" %>
+
                 
 
         <%= submit_tag("CloneVM") %>
