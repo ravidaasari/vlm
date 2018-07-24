@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :infobloxes
   get 'decommission/index'
   get 'power_management/index'
   devise_for :users
@@ -38,6 +39,8 @@ Rails.application.routes.draw do
   resources :catalogs
   get '/providers/disconnect' 
   resources :providers
+  resources :infobloxes
+  
   
   
   root 'home#index'

@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  infoblox_url: MyString
+  infoblox_username: MyString
+  infoblox_password: MyString
+  encrypted_infoblox_password: MyString
+  encrypted_infoblox_password_iv: MyString
+
+two:
+  infoblox_url: MyString
+  infoblox_username: MyString
+  infoblox_password: MyString
+  encrypted_infoblox_password: MyString
+  encrypted_infoblox_password_iv: MyString

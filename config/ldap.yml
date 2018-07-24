@@ -32,8 +32,7 @@ development:
   port: 636
   attribute: uid
   base: ou=adusers,ou=people,dc=vmware,dc=com
-  admin_user: cn=manager,dc=vmware,dc=com
-  admin_password: GV7-Gek3EB7C%wt-4N
+  
   ssl: true   
   # <<: *AUTHORIZATIONS
 

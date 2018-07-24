@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Infoblox url:</strong>
+  <%= @infoblox.infoblox_url %>
+</p>
+
+<p>
+  <strong>Infoblox username:</strong>
+  <%= @infoblox.infoblox_username %>
+</p>
+
+<!-- <p>
+  <strong>Infoblox password:</strong>
+  <%= @infoblox.infoblox_password %>
+</p>
+
+<p>
+  <strong>Encrypted infoblox password:</strong>
+  <%= @infoblox.encrypted_infoblox_password %>
+</p>
+
+<p>
+  <strong>Encrypted infoblox password iv:</strong>
+  <%= @infoblox.encrypted_infoblox_password_iv %>
+</p> -->
+
+<%= link_to 'Edit', edit_infoblox_path(@infoblox) %> |
+<%= link_to 'Back', infobloxes_path %>

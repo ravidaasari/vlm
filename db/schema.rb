@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_07_03_064007) do
+ActiveRecord::Schema.define(version: 2018_07_24_113359) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -28,6 +28,15 @@ ActiveRecord::Schema.define(version: 2018_07_03_064007) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "provider_id"
+  end
+
+  create_table "infobloxes", force: :cascade do |t|
+    t.string "infoblox_url"
+    t.string "infoblox_username"
+    t.string "encrypted_infoblox_password"
+    t.string "encrypted_infoblox_password_iv"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "providers", force: :cascade do |t|

@@ -1,0 +1,42 @@
+<%= form_with(model: infoblox, local: true) do |form| %>
+  <% if infoblox.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(infoblox.errors.count, "error") %> prohibited this infoblox from being saved:</h2>
+
+      <ul>
+      <% infoblox.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :infoblox_url %>
+    <%= form.text_field :infoblox_url %>
+  </div>
+
+  <div class="field">
+    <%= form.label :infoblox_username %>
+    <%= form.text_field :infoblox_username %>
+  </div>
+
+  <div class="field">
+    <%= form.label :infoblox_password %>
+    <%= form.password_field :infoblox_password %>
+  </div>
+
+  <!-- <div class="field">
+    <%#= form.label :encrypted_infoblox_password %>
+    <%#= form.text_field :encrypted_infoblox_password %>
+  </div>
+
+  <div class="field">
+    <%#= form.label :encrypted_infoblox_password_iv %>
+    <%#= form.text_field :encrypted_infoblox_password_iv %>
+  </div> -->
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>
