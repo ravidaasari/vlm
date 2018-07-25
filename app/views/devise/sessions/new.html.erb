@@ -1,26 +1,38 @@
+<body style="background: #CBE5FF">
+<link rel="stylesheet" type="text/css" href="../../../assets/stylesheets/style.css">
 <h2>Log in</h2>
+<div class="loginbox">
+  <%= image_tag("/images/avatar.jpg",:class=>"avatarclass") %>
 
-<%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-  <div class="field">
-    <%= f.label :username, "AD Username" %><br />
-    <%= f.text_field :username, autofocus: true, autocomplete: "username" %>
-  </div>
 
-  <div class="field">
-    <%= f.label :password %><br />
-    <%= f.password_field :password, autocomplete: "off" %>
-  </div>
-
-  <% if devise_mapping.rememberable? -%>
+  <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
     <div class="field">
-      <%= f.check_box :remember_me %>
-      <%= f.label :remember_me %>
+      <%= f.label :username, "AD Username" %><br />
+      <%= f.text_field :username, autofocus: true, autocomplete: "username",:class=>"inputclass" %>
     </div>
-  <% end -%>
 
-  <div class="actions">
-    <%= f.submit "Log in" %>
-  </div>
-<% end %>
+    <div class="field">
+      <%= f.label :password %><br />
+      <%= f.password_field :password, autocomplete: "off",:class=>"inputclass" %>
+    </div>
+
+    <% if devise_mapping.rememberable? -%>
+      <div class="field">
+        <%= f.check_box :remember_me %>
+        <%= f.label :remember_me %>
+      </div>
+    <% end %>
+
+    <div class="actions">
+      <%= f.submit "Log in",:class=>"submitclass" %>
+    </div>
+  <% end %>
+</div>
+
+</body>
+ 
+
+
+
 
 <%#= render "devise/shared/links" %>
