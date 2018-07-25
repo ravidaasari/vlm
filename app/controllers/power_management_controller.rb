@@ -5,6 +5,7 @@ class PowerManagementController < ApplicationController
     @vms = []
     @folders = []
     @vms_folder = []
+    
   end
 
   def find_datacenters
