@@ -211,6 +211,7 @@ class DecommissionController < ApplicationController
         if date == Date.today 
           # NotificationMailer.decommission_notification(@response, vm_name, current_user.email).deliver_now!
         NotificationMailer.decommission_notification(@response, vm_name, @senders).deliver_now!
+        record_activity("Deleted new VM #{@vmname}")
         end  			
         return @response
 

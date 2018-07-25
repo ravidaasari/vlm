@@ -8,6 +8,18 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   skip_before_action :verify_authenticity_token
 
+  def record_activity(note)
+  @log = Log.new
+  @log.user = current_user.username
+  @log.note = note
+  @log.browser = request.env['HTTP_USER_AGENT']
+  @log.ip_address = request.env['REMOTE_ADDR']
+  @log.controller = controller_name
+  @log.action = action_name
+  @log.params = params.inspect
+  @log.save
+end
+
   protected
 
 def configure_permitted_parameters
