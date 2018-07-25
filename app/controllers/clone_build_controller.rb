@@ -219,9 +219,7 @@ class CloneBuildController < ApplicationController
     puts ip_address
     puts my_target_vm
 
-    # infoblox_user = "svc.coreinfra_robot"
-    # infoblox_password = "Vmware@123"
-    # infoblox_url = "https://10.28.115.195"
+    
     @infoblox_db = Infoblox.all
 
     infoblox_user = @infoblox_db[0].infoblox_username
