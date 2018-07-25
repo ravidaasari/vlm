@@ -21,3 +21,7 @@
 <% if @response.code == 200 && @pcmd == "destroy" %>
 <h4> The VM "<%= @vmname %>" is deleted successfully! </h4>
 <% end %>
+
+<% if @response.code == 500 && @pcmd == "destroy" %>
+<h4> The VM "<%= @vmname %>" should be powered off before deleting. </h4>
+<% end %>

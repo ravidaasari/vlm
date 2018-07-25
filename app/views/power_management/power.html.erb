@@ -6,6 +6,7 @@
 <!--<h2> Unauthenticated </h2>-->
 <%# end %>
 <%# = @on_status %>
+<%#= @response %>
 <%#= @response["value"] %> 
 <%#= @response["value"]["messages"][0]["default_message"] %>
 <%#= @response.code %>
@@ -21,6 +22,10 @@
 
 <% if @response.code == 200 && @pcmd == "power_off" %>
 <h4> The VM "<%= @vmname %>" is powered off. </h4>
+<% end %>
+
+<% if @response.code == 500 && @pcmd == "destroy" %>
+<h4> The VM "<%= @vmname %>" should be powered off before deleting. </h4>
 <% end %>
 
 <% if @response.code == 400 && @response["value"]["messages"][0]["default_message"]  == "Virtual machine is already powered on."%>

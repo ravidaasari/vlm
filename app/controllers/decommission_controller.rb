@@ -108,8 +108,10 @@ class DecommissionController < ApplicationController
       url = infoblox_url + "/wapi/v2.5/record:host?name=#{my_target_vm}&_return_fields=name&_return_as_object=1&_proxy_search=GM"
 
       response = HTTParty.get(url, basic_auth: auth, headers: header, verify: false)
+      puts response
 
       ref = response["result"][0]["_ref"]
+      puts ref
 
       url_del = infoblox_url + "/wapi/v2.5/" + ref
 
