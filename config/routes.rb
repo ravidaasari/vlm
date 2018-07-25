@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :logs
   resources :infobloxes
   get 'decommission/index'
   get 'power_management/index'
@@ -39,7 +40,7 @@ Rails.application.routes.draw do
   resources :catalogs
   get '/providers/disconnect' 
   resources :providers
-  resources :infobloxes
+  
   
   
   

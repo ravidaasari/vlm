@@ -1,0 +1,40 @@
+<%# if @response["value"]["state"] == "POWERED_ON" %>
+<%#= "The server is powered on"  %>
+<%# elsif @response["value"]["state"] == "POWERED_OFF" %>
+<!--<h2> The server is powered off </h2>-->
+<%# else %>
+<!--<h2> Unauthenticated </h2>-->
+<%# end %>
+<%# = @on_status %>
+<%#= @response["value"] %> 
+<%#= @response["value"]["messages"][0]["default_message"] %>
+<%#= @response.code %>
+<%#= @response.headers %>
+<% if @pcmd == "power" %>
+<h4> The VM "<%= @vmname %>" is in <%= @response["value"]["state"].to_s.tr("_", " ") %> state.</h4>
+<% end %>
+
+<% if @response.code == 200 && @pcmd == "power_on" %>
+<h4> The VM "<%= @vmname %>" is powered on. </h4>
+<% end %>	
+
+<% if @response.code == 200 && @pcmd == "power_off" %>
+<h4> The VM "<%= @vmname %>" is powered off. </h4>
+<% end %>
+
+<% if @response.code == 400 && @response["value"]["messages"][0]["default_message"]  == "Virtual machine is already powered on."%>
+<h4> Virtual machine "<%= @vmname %>" is already powered on. </h4>
+<% end %>
+
+<% if @response.code == 400 && @response["value"]["messages"][0]["default_message"]  == "Virtual machine is already powered off."%>
+<h4> Virtual machine "<%= @vmname %>" is already powered off. </h4>
+<% end %>
+
+<% if @response.code == 400 && @response["value"]["messages"][0]["default_message"] == "Virtual machine that is powered off or suspended cannot be reset." %>
+<h4> Virtual machine is powered off, hence it cannot be reset </h4>
+<% end %>
+
+<% if @response.code == 200 && @pcmd == "power_reset" %>
+<h4> The VM "<%= @vmname %>" is reset successfully! </h4>
+<% end %>
+

@@ -1,0 +1,11 @@
+<h2>Users Activities</h2>
+<% @logs.each do |log| %>
+<div class="activity">
+<%= log.created_at %>
+<%= log.user %>
+<%#= activity.PublicActivity:: Activity id %>
+<%= log.controller %>
+<%= log.note %>
+<%#= track.params %>
+</div>
+<% end %>

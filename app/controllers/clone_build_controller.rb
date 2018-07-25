@@ -348,7 +348,10 @@ class CloneBuildController < ApplicationController
                                          :template => false)
 
       @new_vm = vm.CloneVM_Task(:folder => vm.parent, :name => @my_target_vm, :spec => spec).wait_for_completion
+      puts @new_vm
       NotificationMailer.clone_notification(@my_ip_address, @my_target_vm, @senders).deliver_now!
+      varsample = record_activity("Created new VM #{@new_vm}")
+      puts varsample
   end
 
 

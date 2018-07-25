@@ -1,0 +1,39 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>User:</strong>
+  <%= @log.user %>
+</p>
+
+<p>
+  <strong>Browser:</strong>
+  <%= @log.browser %>
+</p>
+
+<p>
+  <strong>Ip address:</strong>
+  <%= @log.ip_address %>
+</p>
+
+<p>
+  <strong>Controller:</strong>
+  <%= @log.controller %>
+</p>
+
+<p>
+  <strong>Action:</strong>
+  <%= @log.action %>
+</p>
+
+<p>
+  <strong>Params:</strong>
+  <%= @log.params %>
+</p>
+
+<p>
+  <strong>Note:</strong>
+  <%= @log.note %>
+</p>
+
+<%= link_to 'Edit', edit_log_path(@log) %> |
+<%= link_to 'Back', logs_path %>
