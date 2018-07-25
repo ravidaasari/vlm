@@ -188,10 +188,6 @@ class CloneBuildController < ApplicationController
     @my_subnet = my_subnet
 
     @infoblox_db = Infoblox.all
-    
-    # infoblox_user = "svc.coreinfra_robot"
-    # infoblox_password = "Vmware@123"
-    # infoblox_url = "https://10.28.115.195"
 
     infoblox_user = @infoblox_db[0].infoblox_username
     infoblox_password = @infoblox_db[0].infoblox_password

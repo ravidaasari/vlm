@@ -94,20 +94,29 @@ class DecommissionController < ApplicationController
       my_target_vm = @vmname + ".vmware.com"
       puts my_target_vm
 
-      infoblox_user = "svc.coreinfra_robot"
-      infoblox_password = "Vmware@123"
-      infoblox_url = "https://10.28.115.195"
+      @infoblox_db = Infoblox.all
+
+      infoblox_user = @infoblox_db[0].infoblox_username
+      infoblox_password = @infoblox_db[0].infoblox_password
+      infoblox_url = @infoblox_db[0].infoblox_url
 
       auth = { username: infoblox_user, password: infoblox_password }
       header = {}
       header["Content-Type"]  = 'application/json' 
       header["Accept"] = 'application/json'
 
-      url = "https://10.28.115.195/wapi/v2.5/request"
+      url = infoblox_url + "/wapi/v2.5/record:host?name=#{my_target_vm}&_return_fields=name&_return_as_object=1&_proxy_search=GM"
 
-      body = [{"method": "STATE:ASSIGN","data": {"host_name": my_target_vm}},{"method": "GET","object": "record:host","data":  {"name": "##STATE:host_name:##"},"assign_state": {"host_ref":  "_ref"},"enable_substitution": true,"discard": true},{"method": "DELETE", "object": "##STATE:host_ref:##","enable_substitution": true,"discard": true},{"method": "STATE:DISPLAY"}]
+      response = HTTParty.get(url, basic_auth: auth, headers: header, verify: false)
 
-      response_dns_del = HTTParty.post(url, basic_auth: auth, headers: header, body: body.to_json, verify: false)
+      ref = response["result"][0]["_ref"]
+
+      url_del = infoblox_url + "/wapi/v2.5/" + ref
+
+      # body = [{"method": "STATE:ASSIGN","data": {"host_name": my_target_vm}},{"method": "GET","object": "record:host","data":  {"name": "##STATE:host_name:##"},"assign_state": {"host_ref":  "_ref"},"enable_substitution": true,"discard": true},{"method": "DELETE", "object": "##STATE:host_ref:##","enable_substitution": true,"discard": true},{"method": "STATE:DISPLAY"}]
+
+      # response_dns_del = HTTParty.post(url, basic_auth: auth, headers: header, body: body.to_json, verify: false)
+      response_dns_del = HTTParty.delete(url_del, basic_auth: auth, headers: header, verify: false)
       puts response_dns_del
 
     end
