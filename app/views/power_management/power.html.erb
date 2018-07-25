@@ -13,6 +13,7 @@
 <% if @pcmd == "power" %>
 <h4> The VM "<%= @vmname %>" is in <%= @response["value"]["state"].to_s.tr("_", " ") %> state.</h4>
 <% end %>
+<%#= link_to 'Back', 'index'%>
 
 <% if @response.code == 200 && @pcmd == "power_on" %>
 <h4> The VM "<%= @vmname %>" is powered on. </h4>
