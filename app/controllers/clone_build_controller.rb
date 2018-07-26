@@ -206,14 +206,18 @@ class CloneBuildController < ApplicationController
     puts response["result"]
     network_reference = response["result"][0]["_ref"]
 
-    # body = '{"num" => 5}'
+     body = {"num" => 10}
     # url1 = infoblox_url + "/wapi/v2.5/" + network_reference + "?_function=next_available_ip&_return_as_object=1"
     url1 = "https://10.28.115.195/wapi/v2.5/" + network_reference + "?_function=next_available_ip&_return_as_object=1"
-    response1 = HTTParty.post(url1, basic_auth: auth, headers: header, verify: false)
+    response1 = HTTParty.post(url1, basic_auth: auth, headers: header,body: body.to_json, verify: false)
     puts response1
-    return response1["result"]["ips"][0]
+    puts response1["result"]["ips"]
+    
+    ip_addr = response1["result"]["ips"].find{|ip| Net::Ping::External.new(ip).ping? == false }
+    
+    return ip_addr
 
-  end
+end
 
   def register_host(my_ip_address, my_target_vm)
     ip_address = my_ip_address
@@ -350,7 +354,7 @@ class CloneBuildController < ApplicationController
       @new_vm = vm.CloneVM_Task(:folder => vm.parent, :name => @my_target_vm, :spec => spec).wait_for_completion
       puts @new_vm
       NotificationMailer.clone_notification(@my_ip_address, @my_target_vm, @senders).deliver_now!
-      varsample = record_activity("Created new VM #{@new_vm}")
+      varsample = record_activity("Created new VM #{@my_target_vm}")
       puts varsample
   end
 

@@ -5,6 +5,7 @@ ruby '2.5.1'
 gem 'rbvmomi'
 gem 'httparty'
 gem "attr_encrypted", "~> 3.0.0"
+gem "net-ping"
 
 gem "devise_ldap_authenticatable"
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'

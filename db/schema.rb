@@ -56,10 +56,10 @@ ActiveRecord::Schema.define(version: 2018_07_25_101449) do
     t.string "provider_type"
     t.string "provider_url"
     t.string "provider_user"
-    t.string "encrypted_provider_password"
     t.string "provider_session"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "encrypted_provider_password"
     t.string "encrypted_provider_password_iv"
   end
 
