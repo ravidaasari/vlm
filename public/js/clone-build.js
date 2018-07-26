@@ -58,6 +58,29 @@ var xhr = new XMLHttpRequest();
 
 }, false); 
 
+  TvmHandle.addEventListener('change', function(){
+    var xhr = new XMLHttpRequest();
+      xhr.open('GET', `/clone_build/find_vms.json?provider_id=${providerHandle.value}&source_vm=${TvmHandle.value}`, true);
+
+      xhr.onreadystatechange = function(){
+      if(xhr.readyState === 4 && xhr.status === 200){
+          var vmDetails = JSON.parse(xhr.responseText);
+            if (JSON.stringify(vmDetails) != '{"vms":[]}') {
+                 TvmErrorHandle.innerHTML = "VM name is taken"
+              }
+            else
+              {
+                 TvmErrorHandle.innerHTML = ""
+              }
+          }
+          else{
+            console.log("Unknown Error with readystate or xhrstatus")
+          }
+  }
+      xhr.send();
+
+  }, false);
+
 
 folderHandle.addEventListener('change', function(){
   
