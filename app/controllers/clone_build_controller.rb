@@ -198,8 +198,8 @@ class CloneBuildController < ApplicationController
     header["Content-Type"]  = 'application/json' 
     header["Accept"] = 'application/json'
 
-    # url = infoblox_url + "/wapi/v2.5/network?network=#{my_subnet}&_return_as_object=1&_proxy_search=GM"
-    url = "https://10.28.115.195/wapi/v2.5/network?network=#{my_subnet}&_return_as_object=1"
+    url = infoblox_url + "/wapi/v2.5/network?network=#{my_subnet}&_return_as_object=1"
+    # url = "https://10.28.115.195/wapi/v2.5/network?network=#{my_subnet}&_return_as_object=1"
     puts url
     response = HTTParty.get(url, basic_auth: auth, headers: header, verify: false)
     puts response
@@ -207,8 +207,8 @@ class CloneBuildController < ApplicationController
     network_reference = response["result"][0]["_ref"]
 
      body = {"num" => 10}
-    # url1 = infoblox_url + "/wapi/v2.5/" + network_reference + "?_function=next_available_ip&_return_as_object=1"
-    url1 = "https://10.28.115.195/wapi/v2.5/" + network_reference + "?_function=next_available_ip&_return_as_object=1"
+    url1 = infoblox_url + "/wapi/v2.5/" + network_reference + "?_function=next_available_ip&_return_as_object=1"
+    # url1 = "https://10.28.115.195/wapi/v2.5/" + network_reference + "?_function=next_available_ip&_return_as_object=1"
     response1 = HTTParty.post(url1, basic_auth: auth, headers: header,body: body.to_json, verify: false)
     puts response1
     puts response1["result"]["ips"]
@@ -242,7 +242,7 @@ end
     # body = {:name=>"#{my_target_vm}", :ipv4addrs=>[{:ipv4addr=>"#{ip_address}"}], :view=>"default", :extattrs=>{:"Tenant ID"=>{:value=>"1011"}, :"Cloud API Owned"=>{:value=>"False"}, :"CMP Type"=>{:value=>"vCO/vCAC"}}}
     # body =  {"name" => "#{my_target_vm}","ipv4addrs"=> [{"ipv4addr"=> "#{ip_address}"}],"view"=> "default","extattrs"=> {"Tenant ID"=> {"value"=> "1011"},"Cloud API Owned"=> {"value"=> "False"},"CMP Type"=> {"value"=> "vCO/vCAC"}}}
 
-    body = {"name":my_target_vm,"ipv4addrs":[{"ipv4addr":ip_address}],"view":"default","extattrs":{"Tenant ID":{"value":"1011"},"Cloud API Owned":{"value":"False"},"CMP Type":{"value":"vCO/vCAC"}}}
+    body = {"name":my_target_vm,"ipv4addrs":[{"ipv4addr":ip_address}],"view":"default","extattrs":{"CMP Type":{"value":"ruby"}}}
     response_dns = HTTParty.post(url, basic_auth: auth, headers: header, body: body.to_json, verify: false)
     puts response_dns
 

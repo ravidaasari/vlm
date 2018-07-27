@@ -4,7 +4,7 @@ class ApplicationController < ActionController::Base
   end
   before_action :configure_permitted_parameters, if: :devise_controller?
   before_action :authenticate_user!
-	
+  before_action do record_activity('') end	
   protect_from_forgery with: :exception
   skip_before_action :verify_authenticity_token
 
