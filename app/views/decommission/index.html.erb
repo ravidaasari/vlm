@@ -17,7 +17,7 @@
             <label for="datacenter"> Datacenter </label><br>
             <%= select_tag :source_dc, options_from_collection_for_select(@datacenters, "datacenter", "name"), {:prompt => "--select datacenter--"} %> 
             <img src="/images/loading.gif" height=20 id="loading-sdc" style="display:none" /><br/>
-
+		
             <label for="folder"> Folders </label><br>
             <%= select_tag :folders, options_from_collection_for_select(@folders, "folder", "name"), {:prompt => "--select folder--"} %> 
             <img src="/images/loading.gif" height=20 id="loading-folder" style="display:none" /><br/>
