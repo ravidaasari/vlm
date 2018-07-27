@@ -199,7 +199,7 @@ class CloneBuildController < ApplicationController
     header["Accept"] = 'application/json'
 
     url = infoblox_url + "/wapi/v2.5/network?network=#{my_subnet}&_return_as_object=1"
-    # url = "https://10.28.115.195/wapi/v2.5/network?network=#{my_subnet}&_return_as_object=1"
+    
     puts url
     response = HTTParty.get(url, basic_auth: auth, headers: header, verify: false)
     puts response
@@ -208,7 +208,7 @@ class CloneBuildController < ApplicationController
 
      body = {"num" => 10}
     url1 = infoblox_url + "/wapi/v2.5/" + network_reference + "?_function=next_available_ip&_return_as_object=1"
-    # url1 = "https://10.28.115.195/wapi/v2.5/" + network_reference + "?_function=next_available_ip&_return_as_object=1"
+    
     response1 = HTTParty.post(url1, basic_auth: auth, headers: header,body: body.to_json, verify: false)
     puts response1
     puts response1["result"]["ips"]

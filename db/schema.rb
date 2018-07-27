@@ -33,6 +33,7 @@ ActiveRecord::Schema.define(version: 2018_07_27_042623) do
   create_table "infobloxes", force: :cascade do |t|
     t.string "infoblox_url"
     t.string "infoblox_username"
+    t.string "infoblox_password"
     t.string "encrypted_infoblox_password"
     t.string "encrypted_infoblox_password_iv"
     t.datetime "created_at", null: false
