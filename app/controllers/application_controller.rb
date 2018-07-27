@@ -4,14 +4,18 @@ class ApplicationController < ActionController::Base
   end
   before_action :configure_permitted_parameters, if: :devise_controller?
   before_action :authenticate_user!
-  before_action do record_activity('') end	
+
+  before_action do record_activity('') end
+	
   protect_from_forgery with: :exception
   skip_before_action :verify_authenticity_token
 
   def record_activity(note)
 
   @log = Log.new
-  @log.user = current_user.username
+  if !current_user.nil?
+    @log.user = current_user.username
+  end
   @log.note = note
   @log.browser = request.env['HTTP_USER_AGENT']
   @log.ip_address = request.env['REMOTE_ADDR']

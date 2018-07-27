@@ -30,6 +30,7 @@ class ProvidersController < ApplicationController
       if @provider.save
         format.html { redirect_to @provider, notice: 'Provider was successfully created.' }
         format.json { render :show, status: :created, location: @provider }
+        record_activity("Created new provider #{@provider.provider_name}")
       else
         format.html { render :new }
         format.json { render json: @provider.errors, status: :unprocessable_entity }

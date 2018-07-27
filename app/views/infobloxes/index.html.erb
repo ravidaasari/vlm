@@ -7,9 +7,6 @@
     <tr>
       <th>Infoblox url</th>
       <th>Infoblox username</th>
-      <!-- <th>Infoblox password</th>
-      <th>Encrypted infoblox password</th>
-      <th>Encrypted infoblox password iv</th> -->
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -19,9 +16,7 @@
       <tr>
         <td><%= infoblox.infoblox_url %></td>
         <td><%= infoblox.infoblox_username %></td>
-        <!-- <td><%= infoblox.infoblox_password %></td>
-        <td><%= infoblox.encrypted_infoblox_password %></td>
-        <td><%= infoblox.encrypted_infoblox_password_iv %></td> -->
+        
         <td><%= link_to 'Show', infoblox %></td>
         <td><%= link_to 'Edit', edit_infoblox_path(infoblox) %></td>
         <td><%= link_to 'Destroy', infoblox, method: :delete, data: { confirm: 'Are you sure?' } %></td>
